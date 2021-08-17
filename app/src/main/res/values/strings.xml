@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Private DNS Quick Toggle</string>
-    <string name="tile_name">Test</string>
+    <string name="tile_name">Private DNS Toggle</string>
     <string name="permission_missing">Permission not granted, check app to see how to do it</string>
     <string name="dns_off">Off</string>
     <string name="dns_auto">Auto</string>
