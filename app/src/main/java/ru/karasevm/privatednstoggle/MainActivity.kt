@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com")) //TODO: REPLACE LINK
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
             startActivity(browserIntent)
             finish()
         }
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             true
         }
         R.id.privacy_policy -> {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))//TODO: REPLACE LINK
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy"))
             startActivity(browserIntent)
             true
         }
