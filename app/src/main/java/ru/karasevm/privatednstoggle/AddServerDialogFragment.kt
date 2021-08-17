@@ -4,16 +4,22 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.dialog_add.*
-import kotlinx.android.synthetic.main.dialog_add.view.*
+import ru.karasevm.privatednstoggle.databinding.DialogAddBinding
 
 
-class AddServerDialogFragment(): DialogFragment() {
+class AddServerDialogFragment() : DialogFragment() {
     // Use this instance of the interface to deliver action events
     internal lateinit var listener: NoticeDialogListener
+
+    private var _binding: DialogAddBinding? = null
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     /* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
@@ -31,27 +37,37 @@ class AddServerDialogFragment(): DialogFragment() {
             listener = context as NoticeDialogListener
         } catch (e: ClassCastException) {
             // The activity doesn't implement the interface, throw exception
-            throw ClassCastException((context.toString() +
-                    " must implement NoticeDialogListener"))
+            throw ClassCastException(
+                (context.toString() +
+                        " must implement NoticeDialogListener")
+            )
         }
     }
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+    override fun onCreateDialog(
+        savedInstanceState: Bundle?
+    ): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             // Get the layout inflater
             val inflater = requireActivity().layoutInflater;
-            val view = inflater.inflate(R.layout.dialog_add, null)
+            _binding = DialogAddBinding.inflate(inflater)
+
+            val view = binding.root
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
             builder.setTitle(R.string.add_server)
                 .setView(view)
                 // Add action buttons
                 .setPositiveButton(R.string.add,
-                    DialogInterface.OnClickListener { dialog, id ->
-                        listener.onDialogPositiveClick(this,view.editTextServerAddr.text.toString())
+                    DialogInterface.OnClickListener { _, _ ->
+                        listener.onDialogPositiveClick(
+                            this,
+                            binding.editTextServerAddr.text.toString()
+                        )
                     })
                 .setNegativeButton(R.string.cancel,
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         getDialog()?.cancel()
                     })
             builder.create()

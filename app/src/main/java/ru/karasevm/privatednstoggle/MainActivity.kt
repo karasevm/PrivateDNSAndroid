@@ -4,35 +4,38 @@ import android.Manifest
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import ru.karasevm.privatednstoggle.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogListener, DeleteServerDialogFragment.NoticeDialogListener {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var binding: ActivityMainBinding
     public var items = mutableListOf<String>()
     lateinit var sharedPrefs: SharedPreferences
     lateinit var adapter: RecyclerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
             startActivity(browserIntent)
             finish()
         }
         linearLayoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = linearLayoutManager
+        binding.recyclerView.layoutManager = linearLayoutManager
 
         sharedPrefs = this.getSharedPreferences("app_prefs", 0);
 
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             val newFragment = DeleteServerDialogFragment(position)
             newFragment.show(supportFragmentManager, "delete_server")
         }
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         }
         items.add(server)
         adapter.setData(items.toMutableList())
-        recyclerView.adapter?.notifyItemInserted(items.size - 1)
+        binding.recyclerView.adapter?.notifyItemInserted(items.size - 1)
         sharedPrefs.edit()
             .putString("dns_servers", items.joinToString(separator = ",") { it -> it }).commit()
     }

@@ -4,11 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.dialog_add.*
-import kotlinx.android.synthetic.main.dialog_add.view.*
 
 
 class DeleteServerDialogFragment(val position: Int): DialogFragment() {
