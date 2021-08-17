@@ -37,16 +37,15 @@ class DeleteServerDialogFragment(val position: Int): DialogFragment() {
             val builder = AlertDialog.Builder(it)
             // Get the layout inflater
             val inflater = requireActivity().layoutInflater;
-            val view = inflater.inflate(R.layout.dialog_add, null)
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
             builder.setMessage(R.string.delete_question)
                 .setPositiveButton(R.string.delete,
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         listener.onDialogPositiveClick(this, position)
                     })
                 .setNegativeButton(R.string.cancel,
-                    DialogInterface.OnClickListener { dialog, id ->
+                    DialogInterface.OnClickListener { _, _ ->
                         getDialog()?.cancel()
                     })
             // Create the AlertDialog object and return it
