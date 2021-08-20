@@ -2,15 +2,14 @@ package ru.karasevm.privatednstoggle
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
 
-class DeleteServerDialogFragment(val position: Int): DialogFragment() {
+class DeleteServerDialogFragment(private val position: Int): DialogFragment() {
     // Use this instance of the interface to deliver action events
-    internal lateinit var listener: NoticeDialogListener
+    private lateinit var listener: NoticeDialogListener
 
     /* The activity that creates an instance of this dialog fragment must
      * implement this interface in order to receive event callbacks.
@@ -35,19 +34,16 @@ class DeleteServerDialogFragment(val position: Int): DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
-            // Get the layout inflater
-            val inflater = requireActivity().layoutInflater;
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
+
             builder.setMessage(R.string.delete_question)
-                .setPositiveButton(R.string.delete,
-                    DialogInterface.OnClickListener { _, _ ->
-                        listener.onDialogPositiveClick(this, position)
-                    })
-                .setNegativeButton(R.string.cancel,
-                    DialogInterface.OnClickListener { _, _ ->
-                        getDialog()?.cancel()
-                    })
+                .setPositiveButton(R.string.delete
+                ) { _, _ ->
+                    listener.onDialogPositiveClick(this, position)
+                }
+                .setNegativeButton(R.string.cancel
+                ) { _, _ ->
+                    dialog?.cancel()
+                }
             // Create the AlertDialog object and return it
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")

@@ -2,18 +2,15 @@ package ru.karasevm.privatednstoggle
 
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import ru.karasevm.privatednstoggle.databinding.DialogAddBinding
 
 
-class AddServerDialogFragment() : DialogFragment() {
+class AddServerDialogFragment : DialogFragment() {
     // Use this instance of the interface to deliver action events
-    internal lateinit var listener: NoticeDialogListener
+    private lateinit var listener: NoticeDialogListener
 
     private var _binding: DialogAddBinding? = null
 
@@ -50,7 +47,7 @@ class AddServerDialogFragment() : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             // Get the layout inflater
-            val inflater = requireActivity().layoutInflater;
+            val inflater = requireActivity().layoutInflater
             _binding = DialogAddBinding.inflate(inflater)
 
             val view = binding.root
@@ -59,17 +56,17 @@ class AddServerDialogFragment() : DialogFragment() {
             builder.setTitle(R.string.add_server)
                 .setView(view)
                 // Add action buttons
-                .setPositiveButton(R.string.add,
-                    DialogInterface.OnClickListener { _, _ ->
-                        listener.onDialogPositiveClick(
-                            this,
-                            binding.editTextServerAddr.text.toString()
-                        )
-                    })
-                .setNegativeButton(R.string.cancel,
-                    DialogInterface.OnClickListener { _, _ ->
-                        getDialog()?.cancel()
-                    })
+                .setPositiveButton(R.string.add
+                ) { _, _ ->
+                    listener.onDialogPositiveClick(
+                        this,
+                        binding.editTextServerAddr.text.toString()
+                    )
+                }
+                .setNegativeButton(R.string.cancel
+                ) { _, _ ->
+                    dialog?.cancel()
+                }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

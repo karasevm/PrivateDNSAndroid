@@ -10,19 +10,19 @@ import android.util.Log
 import android.widget.Toast
 
 
-const val DNS_MODE_OFF = "off";
-const val DNS_MODE_AUTO = "opportunistic";
-const val DNS_MODE_PRIVATE = "hostname";
+const val DNS_MODE_OFF = "off"
+const val DNS_MODE_AUTO = "opportunistic"
+const val DNS_MODE_PRIVATE = "hostname"
 
 class DnsTileService : TileService() {
 
 
-    fun checkForPermission(): Boolean {
+    private fun checkForPermission(): Boolean {
         if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
+            return true
         }
         Toast.makeText(this, R.string.permission_missing, Toast.LENGTH_SHORT).show()
-        return false;
+        return false
     }
 
     override fun onTileAdded() {
@@ -41,7 +41,7 @@ class DnsTileService : TileService() {
             return
         }
 
-        val dnsMode = Settings.Global.getString(getContentResolver(), "private_dns_mode");
+        val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
         val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")
 
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
@@ -89,8 +89,11 @@ class DnsTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        var dnsMode = Settings.Global.getString(getContentResolver(), "private_dns_mode");
-        Log.d("TEMP", "onStartListening: called " + dnsMode)
+        if (!checkForPermission()) {
+            return
+        }
+        val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
+        Log.d("TEMP", "onStartListening: called $dnsMode")
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
             refreshTile(
                 qsTile,
@@ -170,7 +173,7 @@ class DnsTileService : TileService() {
      * @return next address
      */
     private fun getNextAddress(currentAddress: String?): String? {
-        val sharedPrefs = this.getSharedPreferences("app_prefs", 0);
+        val sharedPrefs = this.getSharedPreferences("app_prefs", 0)
         val items = sharedPrefs.getString("dns_servers", "dns.google")!!.split(",").toMutableList()
 
         // Fallback if list is empty
