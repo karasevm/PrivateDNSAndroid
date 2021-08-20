@@ -19,9 +19,9 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var binding: ActivityMainBinding
-    public var items = mutableListOf<String>()
-    lateinit var sharedPrefs: SharedPreferences
-    lateinit var adapter: RecyclerAdapter
+    private var items = mutableListOf<String>()
+    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var adapter: RecyclerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         linearLayoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = linearLayoutManager
 
-        sharedPrefs = this.getSharedPreferences("app_prefs", 0);
+        sharedPrefs = this.getSharedPreferences("app_prefs", 0)
 
         items = sharedPrefs.getString("dns_servers", "")!!.split(",").toMutableList()
         if (items[0] == "") {
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment, server: String) {
-        if (server.length == 0) {
+        if (server.isEmpty()) {
             Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
             return
         }
@@ -84,16 +84,15 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         adapter.setData(items.toMutableList())
         binding.recyclerView.adapter?.notifyItemInserted(items.size - 1)
         sharedPrefs.edit()
-            .putString("dns_servers", items.joinToString(separator = ",") { it -> it }).commit()
+            .putString("dns_servers", items.joinToString(separator = ",") { it }).apply()
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment,position: Int) {
         items.removeAt(position)
         adapter.setData(items.toMutableList())
-//        adapter.notifyItemRangeChanged(position, items.size - position -2)
-        adapter.notifyDataSetChanged() // TODO: DON'T USE THIS
+        adapter.notifyItemRemoved(position)
         sharedPrefs.edit()
-            .putString("dns_servers", items.joinToString(separator = ",") { it -> it }).commit()
+            .putString("dns_servers", items.joinToString(separator = ",") { it }).apply()
 
     }
 
