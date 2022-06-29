@@ -24,7 +24,8 @@
             android:name=".DnsTileService"
             android:icon="@drawable/ic_auto_black_24dp"
             android:label="@string/tile_name"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="false">
             <intent-filter>
                 <action
                     android:name="android.service.quicksettings.action.QS_TILE"/>
