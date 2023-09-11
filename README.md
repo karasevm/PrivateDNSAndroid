@@ -7,6 +7,11 @@ a single tap.
 ## Installation
 Get the latest apk on the [releases page](https://github.com/karasevm/PrivateDNSAndroid/releases/latest).
 
+## Automatic (Shizuku)
+1. Install and start [Shizuku](https://shizuku.rikka.app/).
+2. Start the app and allow Shizuku access when prompted.
+
+## Manual
 For the app to work properly you'll need to provide it permissions via ADB:
 
 1. Get to your PC and download platform tools from google [here](https://developer.android.com/studio/releases/platform-tools).
