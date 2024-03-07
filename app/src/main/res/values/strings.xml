@@ -6,9 +6,10 @@
     <string name="dns_auto">Auto</string>
     <string name="dns_unknown">Unknown</string>
     <string name="add_server">Add Server</string>
-    <string name="add">Add</string>
     <string name="menu_add">Add</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
+    <string name="menu_auto_enabled">Enable auto</string>
+    <string name="auto_mode_clarification">Automatic (opportunistic) DNS mode will now be available in the tile</string>
     <string name="cancel">Cancel</string>
     <string name="delete_question">Delete server?</string>
     <string name="delete">Delete</string>

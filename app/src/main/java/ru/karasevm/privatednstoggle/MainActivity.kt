@@ -56,7 +56,11 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        val curVal = sharedPrefs.getBoolean("auto_enabled", false)
         menuInflater.inflate(R.menu.menu_main, menu)
+        menu?.findItem(R.id.enable_auto)?.setChecked(curVal)
+
         return true
     }
 
@@ -101,6 +105,16 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         R.id.privacy_policy -> {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy"))
             startActivity(browserIntent)
+            true
+        }
+
+        R.id.enable_auto -> {
+            if (!item.isChecked){
+                Toast.makeText(this, R.string.auto_mode_clarification, Toast.LENGTH_LONG).show()
+            }
+            sharedPrefs.edit().putBoolean("auto_enabled", !item.isChecked).apply()
+            item.setChecked(!item.isChecked)
+
             true
         }
 

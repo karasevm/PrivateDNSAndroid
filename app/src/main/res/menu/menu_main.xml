@@ -5,6 +5,11 @@
         android:icon="@drawable/ic_baseline_add_24"
         android:title="@string/menu_add"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/enable_auto"
+        android:checkable="true"
+        android:title="@string/menu_auto_enabled"
+        app:showAsAction="never" />
     <item android:id="@+id/privacy_policy"
         android:title="@string/menu_privacy_policy"
         app:showAsAction="never" />

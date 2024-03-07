@@ -44,16 +44,33 @@ class DnsTileService : TileService() {
         val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
         val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")
 
+        val sharedPrefs = this.getSharedPreferences("app_prefs", 0)
+        val autoEnabled = sharedPrefs.getBoolean("auto_enabled", false)
+
+
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
 //            refreshTile(qsTile, Tile.STATE_INACTIVE, getString(R.string.dns_off), R.drawable.ic_off_black_24dp)
-            changeTileState(
-                qsTile,
-                Tile.STATE_ACTIVE,
-                getNextAddress(dnsProvider),
-                R.drawable.ic_private_black_24dp,
-                DNS_MODE_PRIVATE,
-                getNextAddress(dnsProvider)
-            )
+            if (autoEnabled) {
+                changeTileState(
+                    qsTile,
+                    Tile.STATE_ACTIVE,
+                    getString(R.string.dns_auto),
+                    R.drawable.ic_auto_black_24dp,
+                    DNS_MODE_AUTO,
+                    dnsProvider
+                )
+            } else {
+                changeTileState(
+                    qsTile,
+                    Tile.STATE_ACTIVE,
+                    getNextAddress(dnsProvider),
+                    R.drawable.ic_private_black_24dp,
+                    DNS_MODE_PRIVATE,
+                    getNextAddress(dnsProvider)
+                )
+
+            }
+
         } else if (dnsMode == null || dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
             changeTileState(
                 qsTile,
@@ -101,12 +118,19 @@ class DnsTileService : TileService() {
                 getString(R.string.dns_off),
                 R.drawable.ic_off_black_24dp
             )
-        } else if (dnsMode == null || dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
+        } else if (dnsMode == null) {
             refreshTile(
                 qsTile,
                 Tile.STATE_INACTIVE,
                 getString(R.string.dns_unknown),
                 R.drawable.ic_unknown_black_24dp
+            )
+        } else if (dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
+            refreshTile(
+                qsTile,
+                Tile.STATE_ACTIVE,
+                getString(R.string.dns_auto),
+                R.drawable.ic_auto_black_24dp
             )
         } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
             val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")
