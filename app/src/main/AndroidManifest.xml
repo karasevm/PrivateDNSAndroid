@@ -28,7 +28,7 @@
         </activity>
         <service
             android:name=".DnsTileService"
-            android:icon="@drawable/ic_auto_black_24dp"
+            android:icon="@drawable/ic_unknown_black_24dp"
             android:label="@string/tile_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true">

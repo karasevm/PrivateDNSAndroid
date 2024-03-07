@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/add_server"
         android:icon="@drawable/ic_baseline_add_24"
-        android:title="@string/add"
+        android:title="@string/menu_add"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/privacy_policy"
-        android:title="@string/privacy_policy"
+        android:title="@string/menu_privacy_policy"
         app:showAsAction="never" />
 </menu>

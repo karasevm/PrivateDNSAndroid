@@ -105,8 +105,8 @@ class DnsTileService : TileService() {
             refreshTile(
                 qsTile,
                 Tile.STATE_INACTIVE,
-                getString(R.string.dns_auto),
-                R.drawable.ic_auto_black_24dp
+                getString(R.string.dns_unknown),
+                R.drawable.ic_unknown_black_24dp
             )
         } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
             val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")

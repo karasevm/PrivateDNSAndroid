@@ -56,7 +56,7 @@ class AddServerDialogFragment : DialogFragment() {
             builder.setTitle(R.string.add_server)
                 .setView(view)
                 // Add action buttons
-                .setPositiveButton(R.string.add
+                .setPositiveButton(R.string.menu_add
                 ) { _, _ ->
                     listener.onDialogPositiveClick(
                         this,
