@@ -4,16 +4,20 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.IPackageManager
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
+import android.permission.IPermissionManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.ShizukuProvider
@@ -66,27 +70,43 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     override fun onResume() {
         super.onResume()
-        // Check if Shizuku is available
-        if (Shizuku.pingBinder()) {
-            // check if permission is granted already
-            val isGranted = if (Shizuku.isPreV11() || Shizuku.getVersion() < 11) {
-                checkSelfPermission(ShizukuProvider.PERMISSION) == PackageManager.PERMISSION_GRANTED
-            } else {
-                Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
-            }
-            // request permission if not granted
-            if (!isGranted && !Shizuku.shouldShowRequestPermissionRationale()) {
-                if (Shizuku.isPreV11() || Shizuku.getVersion() < 11) {
-                    requestPermissions(arrayOf(ShizukuProvider.PERMISSION), 1)
+        // Check if WRITE_SECURE_SETTINGS is granted
+        if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+            // Check if Shizuku is available
+            if (Shizuku.pingBinder()) {
+                // check if permission is granted already
+                val isGranted = if (Shizuku.isPreV11() || Shizuku.getVersion() < 11) {
+                    checkSelfPermission(ShizukuProvider.PERMISSION) == PackageManager.PERMISSION_GRANTED
                 } else {
-                    Shizuku.requestPermission(1)
+                    Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
                 }
-            }
-        } else {
-            if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
-                startActivity(browserIntent)
-                finish()
+                // request permission if not granted
+                if (!isGranted && !Shizuku.shouldShowRequestPermissionRationale()) {
+                    if (Shizuku.isPreV11() || Shizuku.getVersion() < 11) {
+                        requestPermissions(arrayOf(ShizukuProvider.PERMISSION), 1)
+                    } else {
+                        Shizuku.requestPermission(1)
+                    }
+                } else {
+                    // if shizuku permission is granted, but WRITE_SECURE_SETTINGS is not, grant it
+                    try {
+                        grantPermissionWithShizuku()
+                    } catch (exception: Exception) {
+                        Log.e("SHIZUKU", "onRequestPermissionResult: ", exception)
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
+                        startActivity(browserIntent)
+                        finish()
+                    }
+                }
+            } else {
+                if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+                    val browserIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+                    )
+                    startActivity(browserIntent)
+                    finish()
+                }
             }
         }
     }
@@ -146,35 +166,52 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     }
 
+    /**
+     * Attempts to grant WRITE_SECURE_SETTINGS permission with Shizuku
+     */
+    private fun grantPermissionWithShizuku() {
+        val packageName = "ru.karasevm.privatednstoggle"
+        if (Build.VERSION.SDK_INT >= 31) {
+            HiddenApiBypass.addHiddenApiExemptions(
+                "Landroid/permission"
+            )
+            val binder =
+                ShizukuBinderWrapper(SystemServiceHelper.getSystemService("permissionmgr"))
+            val pm = IPermissionManager.Stub.asInterface(binder)
+            pm.grantRuntimePermission(
+                packageName,
+                Manifest.permission.WRITE_SECURE_SETTINGS,
+                0
+            )
+        } else {
+            val binder = ShizukuBinderWrapper(SystemServiceHelper.getSystemService("package"))
+            val pm = IPackageManager.Stub.asInterface(binder)
+            pm.grantRuntimePermission(
+                packageName,
+                Manifest.permission.WRITE_SECURE_SETTINGS,
+                0
+            )
+        }
+        if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
+            startActivity(browserIntent)
+            finish()
+        }
+    }
     @SuppressLint("PrivateApi")
     override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
         val isGranted = grantResult == PackageManager.PERMISSION_GRANTED
 
         if (isGranted) {
-            val packageName = "ru.karasevm.privatednstoggle"
+            try {
+                grantPermissionWithShizuku()
+            } catch (exception: Exception) {
+                Log.e("SHIZUKU", "onRequestPermissionResult: ", exception)
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
+                startActivity(browserIntent)
+                finish()
+            }
 
-            val iPmClass = Class.forName("android.content.pm.IPackageManager")
-            val iPmStub = Class.forName("android.content.pm.IPackageManager\$Stub")
-            val asInterfaceMethod = iPmStub.getMethod("asInterface", IBinder::class.java)
-            val grantRuntimePermissionMethod = iPmClass.getMethod(
-                "grantRuntimePermission",
-                String::class.java /* package name */,
-                String::class.java /* permission name */,
-                Int::class.java /* user ID */
-            )
-
-            val iPmInstance = asInterfaceMethod.invoke(
-                null, ShizukuBinderWrapper(
-                    SystemServiceHelper.getSystemService("package")
-                )
-            )
-
-            grantRuntimePermissionMethod.invoke(
-                iPmInstance,
-                packageName,
-                Manifest.permission.WRITE_SECURE_SETTINGS,
-                0
-            )
         } else if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
             startActivity(browserIntent)

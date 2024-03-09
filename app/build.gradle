@@ -10,7 +10,7 @@ android {
         applicationId "ru.karasevm.privatednstoggle"
         minSdk 21
         targetSdk 34
-        versionCode 7
+        versionCode 8
         versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,6 +47,9 @@ dependencies {
     def shizuku_version = '13.1.5'
     implementation "dev.rikka.shizuku:api:$shizuku_version"
     implementation "dev.rikka.shizuku:provider:$shizuku_version"
+
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
+    compileOnly 'dev.rikka.hidden:stub:4.3.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
