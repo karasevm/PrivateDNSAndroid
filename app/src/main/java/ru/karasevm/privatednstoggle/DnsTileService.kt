@@ -110,7 +110,12 @@ class DnsTileService : TileService() {
             return
         }
         val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
-        Log.d("TEMP", "onStartListening: called $dnsMode")
+
+        // Prevent some crashes
+        if (qsTile == null) {
+            return
+        }
+
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
             refreshTile(
                 qsTile,
