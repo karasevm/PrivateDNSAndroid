@@ -3,8 +3,8 @@ package ru.karasevm.privatednstoggle
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class DeleteServerDialogFragment(private val position: Int): DialogFragment() {
@@ -33,9 +33,10 @@ class DeleteServerDialogFragment(private val position: Int): DialogFragment() {
     }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            val builder = AlertDialog.Builder(it)
+            val builder = MaterialAlertDialogBuilder(it)
 
-            builder.setMessage(R.string.delete_question)
+            builder.setTitle(R.string.delete_question)
+                .setMessage(R.string.delete_message)
                 .setPositiveButton(R.string.delete
                 ) { _, _ ->
                     listener.onDialogPositiveClick(this, position)

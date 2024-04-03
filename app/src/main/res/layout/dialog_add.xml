@@ -4,18 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/editTextServerAddr"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_margin="24dp"
-        android:ems="10"
-        android:maxLines="1"
-        android:inputType="textNoSuggestions"
-        android:importantForAutofill="no"
-        android:hint="@string/add_edittext_hint"
+    <com.google.android.material.textfield.TextInputLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/add_edittext_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextServerAddr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:ems="10"
+            android:importantForAutofill="no"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

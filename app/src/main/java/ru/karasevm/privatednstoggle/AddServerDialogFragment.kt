@@ -3,8 +3,8 @@ package ru.karasevm.privatednstoggle
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.karasevm.privatednstoggle.databinding.DialogAddBinding
 
 
@@ -45,7 +45,7 @@ class AddServerDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): Dialog {
         return activity?.let {
-            val builder = AlertDialog.Builder(it)
+            val builder = MaterialAlertDialogBuilder(it)
             // Get the layout inflater
             val inflater = requireActivity().layoutInflater
             _binding = DialogAddBinding.inflate(inflater)
