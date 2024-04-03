@@ -11,7 +11,8 @@
     <string name="menu_auto_enabled">Enable auto</string>
     <string name="auto_mode_clarification">Automatic (opportunistic) DNS mode will now be available in the tile</string>
     <string name="cancel">Cancel</string>
-    <string name="delete_question">Delete server?</string>
+    <string name="delete_question">Delete</string>
+    <string name="delete_message">Are you sure you want to delete server?</string>
     <string name="delete">Delete</string>
     <string name="server_length_error">Server address cannot be empty</string>
     <string name="add_edittext_hint">DNS server address</string>

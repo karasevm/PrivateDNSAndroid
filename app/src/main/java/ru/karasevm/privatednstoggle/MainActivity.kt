@@ -56,7 +56,31 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             val newFragment = DeleteServerDialogFragment(position)
             newFragment.show(supportFragmentManager, "delete_server")
         }
+        binding.floatingActionButton.setOnClickListener {
+            val newFragment = AddServerDialogFragment()
+            newFragment.show(supportFragmentManager, "add_server")
+        }
         binding.recyclerView.adapter = adapter
+
+        binding.topAppBar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.privacy_policy -> {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy"))
+                    startActivity(browserIntent)
+                    true
+                }
+
+                R.id.enable_auto -> {
+                    if (!item.isChecked){
+                        Toast.makeText(this, R.string.auto_mode_clarification, Toast.LENGTH_LONG).show()
+                    }
+                    sharedPrefs.edit().putBoolean("auto_enabled", !item.isChecked).apply()
+                    item.setChecked(!item.isChecked)
+                    true
+                }
+                else -> true
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -116,35 +140,6 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         Shizuku.removeRequestPermissionResultListener(this::onRequestPermissionResult)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.add_server -> {
-            val newFragment = AddServerDialogFragment()
-            newFragment.show(supportFragmentManager, "add_server")
-            true
-        }
-        R.id.privacy_policy -> {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy"))
-            startActivity(browserIntent)
-            true
-        }
-
-        R.id.enable_auto -> {
-            if (!item.isChecked){
-                Toast.makeText(this, R.string.auto_mode_clarification, Toast.LENGTH_LONG).show()
-            }
-            sharedPrefs.edit().putBoolean("auto_enabled", !item.isChecked).apply()
-            item.setChecked(!item.isChecked)
-
-            true
-        }
-
-        else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
-            super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onDialogPositiveClick(dialog: DialogFragment, server: String) {
         if (server.isEmpty()) {
             Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
@@ -163,7 +158,6 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         adapter.notifyItemRemoved(position)
         sharedPrefs.edit()
             .putString("dns_servers", items.joinToString(separator = ",") { it }).apply()
-
     }
 
     /**
@@ -217,7 +211,5 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             startActivity(browserIntent)
             finish()
         }
-
     }
-
 }
