@@ -7,7 +7,9 @@ import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.widget.Toast
-
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
 
 const val DNS_MODE_OFF = "off"
 const val DNS_MODE_AUTO = "opportunistic"
@@ -43,13 +45,10 @@ class DnsTileService : TileService() {
         val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
         val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")
 
-        val sharedPrefs = this.getSharedPreferences("app_prefs", 0)
-        val autoEnabled = sharedPrefs.getBoolean("auto_enabled", false)
-
+        val sharedPrefs = PreferenceHelper.defaultPreference(this)
 
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
-//            refreshTile(qsTile, Tile.STATE_INACTIVE, getString(R.string.dns_off), R.drawable.ic_off_black_24dp)
-            if (autoEnabled) {
+            if (sharedPrefs.autoMode) {
                 changeTileState(
                     qsTile,
                     Tile.STATE_ACTIVE,
@@ -201,8 +200,8 @@ class DnsTileService : TileService() {
      * @return next address
      */
     private fun getNextAddress(currentAddress: String?): String? {
-        val sharedPrefs = this.getSharedPreferences("app_prefs", 0)
-        val items = sharedPrefs.getString("dns_servers", "dns.google")!!.split(",").toMutableList()
+        val sharedPrefs = PreferenceHelper.defaultPreference(this)
+        val items = sharedPrefs.dns_servers
 
         // Fallback if list is empty
         if (items[0] == "") {
