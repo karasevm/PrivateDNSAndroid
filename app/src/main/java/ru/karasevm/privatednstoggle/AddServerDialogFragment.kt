@@ -2,7 +2,12 @@ package ru.karasevm.privatednstoggle
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.karasevm.privatednstoggle.databinding.DialogAddBinding
@@ -71,5 +76,29 @@ class AddServerDialogFragment : DialogFragment() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        val button = ((dialog) as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE)
+        binding.editTextServerAddr.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val server = binding.editTextServerAddr.text.toString().trim()
+                if (TextUtils.isEmpty(server) || !isValidServer(server)) {
+                    button.isEnabled = false
+                } else {
+                    binding.editTextServerAddr.error = null
+                    button.isEnabled = true
+                }
+            }
+        })
+    }
+
+    private fun isValidServer(str: String): Boolean {
+        return str.matches("(([A-Za-z0-9])+(\\.[A-Za-z0-9\\-]+)+)".toRegex())
+    }
 
 }
