@@ -2,7 +2,7 @@
 A quick settings tile to switch your private dns provider. Supports any number of providers. Makes it easy to turn adblocking dns servers on or off with just
 a single tap.
 
-![Private DNS app screenshot](readme.png)
+![Private DNS app screenshot](readme.jpg)
 
 ## Installation
 Get the latest apk on the [releases page](https://github.com/karasevm/PrivateDNSAndroid/releases/latest).
