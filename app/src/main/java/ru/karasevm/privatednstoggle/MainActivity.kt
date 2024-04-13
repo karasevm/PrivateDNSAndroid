@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.permission.IPermissionManager
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -23,6 +22,9 @@ import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.ShizukuProvider
 import rikka.shizuku.SystemServiceHelper
 import ru.karasevm.privatednstoggle.databinding.ActivityMainBinding
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
 
 
 class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogListener, DeleteServerDialogFragment.NoticeDialogListener, Shizuku.OnRequestPermissionResultListener {
@@ -45,9 +47,9 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         linearLayoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = linearLayoutManager
 
-        sharedPrefs = this.getSharedPreferences("app_prefs", 0)
+        sharedPrefs = PreferenceHelper.defaultPreference(this)
 
-        items = sharedPrefs.getString("dns_servers", "")!!.split(",").toMutableList()
+        items = sharedPrefs.dns_servers
         if (items[0] == "") {
             items.removeAt(0)
         }
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                     if (!item.isChecked){
                         Toast.makeText(this, R.string.auto_mode_clarification, Toast.LENGTH_LONG).show()
                     }
-                    sharedPrefs.edit().putBoolean("auto_enabled", !item.isChecked).apply()
+                    sharedPrefs.autoMode = item.isChecked
                     item.setChecked(!item.isChecked)
                     true
                 }
@@ -85,7 +87,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-        val curVal = sharedPrefs.getBoolean("auto_enabled", false)
+        val curVal = sharedPrefs.autoMode
         menuInflater.inflate(R.menu.menu_main, menu)
         menu?.findItem(R.id.enable_auto)?.setChecked(curVal)
 
@@ -148,16 +150,14 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         items.add(server)
         adapter.setData(items.toMutableList())
         binding.recyclerView.adapter?.notifyItemInserted(items.size - 1)
-        sharedPrefs.edit()
-            .putString("dns_servers", items.joinToString(separator = ",") { it }).apply()
+        sharedPrefs.dns_servers = items
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment,position: Int) {
         items.removeAt(position)
         adapter.setData(items.toMutableList())
         adapter.notifyItemRemoved(position)
-        sharedPrefs.edit()
-            .putString("dns_servers", items.joinToString(separator = ",") { it }).apply()
+        sharedPrefs.dns_servers = items
     }
 
     /**
