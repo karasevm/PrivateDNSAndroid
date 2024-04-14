@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.common.net.InternetDomainName
 import ru.karasevm.privatednstoggle.databinding.DialogAddBinding
 
 
@@ -65,7 +66,7 @@ class AddServerDialogFragment : DialogFragment() {
                 ) { _, _ ->
                     listener.onDialogPositiveClick(
                         this,
-                        binding.editTextServerAddr.text.toString()
+                        binding.editTextServerAddr.text.toString().trim()
                     )
                 }
                 .setNegativeButton(R.string.cancel
@@ -98,7 +99,7 @@ class AddServerDialogFragment : DialogFragment() {
     }
 
     private fun isValidServer(str: String): Boolean {
-        return str.matches("(([A-Za-z0-9])+(\\.[A-Za-z0-9\\-]+)+)".toRegex())
+        return InternetDomainName.isValid(str)
     }
 
 }
