@@ -69,8 +69,10 @@ class DNSServerDialogFragment: DialogFragment() {
         binding.autoSwitch.setOnClickListener {
             if(binding.autoSwitch.isChecked) {
                 PrivateDNSUtils.setPrivateMode(requireActivity().contentResolver, PrivateDNSUtils.DNS_MODE_AUTO)
+                Toast.makeText(context, "DNS Server Set to Auto", Toast.LENGTH_SHORT).show()
             } else {
                 PrivateDNSUtils.setPrivateMode(requireActivity().contentResolver, PrivateDNSUtils.DNS_MODE_PRIVATE)
+                Toast.makeText(context, "DNS Server Set", Toast.LENGTH_SHORT).show()
             }
         }
     }
