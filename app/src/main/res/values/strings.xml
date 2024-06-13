@@ -9,7 +9,9 @@
     <string name="menu_add">Add</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
     <string name="menu_auto_enabled">Enable auto</string>
+    <string name="select_server">Select Server</string>
     <string name="auto_mode_clarification">Automatic (opportunistic) DNS mode will now be available in the tile</string>
+    <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="delete_question">Delete</string>
     <string name="delete_message">Are you sure you want to delete server?</string>

@@ -1,34 +1,23 @@
 package ru.karasevm.privatednstoggle
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.widget.Toast
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
-
-const val DNS_MODE_OFF = "off"
-const val DNS_MODE_AUTO = "opportunistic"
-const val DNS_MODE_PRIVATE = "hostname"
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_AUTO
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_OFF
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_PRIVATE
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.checkForPermission
 
 class DnsTileService : TileService() {
 
-
-    private fun checkForPermission(): Boolean {
-        if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
-            return true
-        }
-        Toast.makeText(this, R.string.permission_missing, Toast.LENGTH_SHORT).show()
-        return false
-    }
-
     override fun onTileAdded() {
         super.onTileAdded()
-        checkForPermission()
+        checkForPermission(this)
         // Update state
         qsTile.state = Tile.STATE_INACTIVE
 
@@ -38,7 +27,7 @@ class DnsTileService : TileService() {
 
     override fun onClick() {
         super.onClick()
-        if (!checkForPermission()) {
+        if (!checkForPermission(this)) {
             return
         }
 
@@ -104,7 +93,7 @@ class DnsTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        if (!checkForPermission()) {
+        if (!checkForPermission(this)) {
             return
         }
         val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
@@ -137,16 +126,12 @@ class DnsTileService : TileService() {
             )
         } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
             val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")
-            if (dnsProvider != null) {
-                refreshTile(
-                    qsTile,
-                    Tile.STATE_ACTIVE,
-                    dnsProvider,
-                    R.drawable.ic_private_black_24dp
-                )
-            } else {
-                Toast.makeText(this, R.string.permission_missing, Toast.LENGTH_SHORT).show()
-            }
+            refreshTile(
+                qsTile,
+                Tile.STATE_ACTIVE,
+                dnsProvider,
+                R.drawable.ic_private_black_24dp
+            )
         }
 
     }
@@ -187,8 +172,8 @@ class DnsTileService : TileService() {
         tile.label = label
         tile.state = state
         tile.icon = Icon.createWithResource(this, icon)
-        Settings.Global.putString(contentResolver, "private_dns_mode", dnsMode)
-        Settings.Global.putString(contentResolver, "private_dns_specifier", dnsProvider)
+        PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
+        PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         tile.updateTile()
     }
 
