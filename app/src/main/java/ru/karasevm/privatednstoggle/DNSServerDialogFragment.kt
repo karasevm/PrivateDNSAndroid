@@ -64,7 +64,6 @@ class DNSServerDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val dnsMode = PrivateDNSUtils.getPrivateMode(requireActivity().contentResolver)
 
         adapter.onItemClick = { position ->
             when (position) {
