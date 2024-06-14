@@ -24,4 +24,8 @@
     <string name="auto_option_only_off">Only off</string>
     <string name="auto_option_only_auto">Only auto</string>
     <string name="auto_option_off_and_auto">Off and auto</string>
+    <string name="open_app">Open app</string>
+    <string name="set_to_off_toast">Private DNS turned off</string>
+    <string name="set_to_auto_toast">Private DNS set to auto</string>
+    <string name="set_to_provider_toast">Private DNS set to %1$s</string>
 </resources>

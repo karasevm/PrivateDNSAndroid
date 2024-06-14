@@ -1,6 +1,7 @@
 package ru.karasevm.privatednstoggle
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
@@ -12,7 +13,7 @@ import ru.karasevm.privatednstoggle.utils.PreferenceHelper.defaultPreference
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils
 
-class DNSServerDialogFragment: DialogFragment() {
+class DNSServerDialogFragment : DialogFragment() {
 
     private var _binding: SheetDnsSelectorBinding? = null
     private val binding get() = _binding!!
@@ -35,20 +36,28 @@ class DNSServerDialogFragment: DialogFragment() {
 
             sharedPrefs = defaultPreference(requireContext())
             items = sharedPrefs.dns_servers
-            if(items[0] == "") {
+            if (items[0] == "") {
                 items.removeAt(0)
                 items.add("dns.google")
             }
 
+            items.add(0, resources.getString(R.string.dns_auto))
+            items.add(0, resources.getString(R.string.dns_off))
+
             adapter = RecyclerAdapter(items)
             binding.recyclerView.adapter = adapter
 
+
+            val startIntent = Intent(context, MainActivity::class.java)
+
             builder.setTitle(R.string.select_server)
                 .setView(binding.root)
-                .setPositiveButton(R.string.done
+                .setPositiveButton(
+                    R.string.done
                 ) { _, _ ->
                     dialog?.dismiss()
                 }
+                .setNeutralButton(R.string.open_app) { _, _ -> context?.startActivity(startIntent) }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
@@ -56,25 +65,46 @@ class DNSServerDialogFragment: DialogFragment() {
     override fun onStart() {
         super.onStart()
         val dnsMode = PrivateDNSUtils.getPrivateMode(requireActivity().contentResolver)
-        binding.autoSwitch.isChecked = dnsMode.lowercase() == "opportunistic"
 
         adapter.onItemClick = { position ->
-            binding.autoSwitch.isChecked = false
-            val server = items[position]
-            PrivateDNSUtils.setPrivateMode(requireActivity().contentResolver, PrivateDNSUtils.DNS_MODE_PRIVATE)
-            PrivateDNSUtils.setPrivateProvider(requireActivity().contentResolver, server)
-            Toast.makeText(context, "DNS Server Set", Toast.LENGTH_SHORT).show()
+            when (position) {
+                0 -> {
+                    PrivateDNSUtils.setPrivateMode(
+                        requireActivity().contentResolver,
+                        PrivateDNSUtils.DNS_MODE_OFF
+                    )
+                    Toast.makeText(context, R.string.set_to_off_toast, Toast.LENGTH_SHORT).show()
+                }
+
+                1 -> {
+                    PrivateDNSUtils.setPrivateMode(
+                        requireActivity().contentResolver,
+                        PrivateDNSUtils.DNS_MODE_AUTO
+                    )
+                    Toast.makeText(context, R.string.set_to_auto_toast, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {
+                    val server = items[position]
+                    PrivateDNSUtils.setPrivateMode(
+                        requireActivity().contentResolver,
+                        PrivateDNSUtils.DNS_MODE_PRIVATE
+                    )
+                    PrivateDNSUtils.setPrivateProvider(
+                        requireActivity().contentResolver,
+                        server
+                    )
+                    Toast.makeText(
+                        context,
+                        getString(R.string.set_to_provider_toast, server),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            dialog?.dismiss()
         }
 
-        binding.autoSwitch.setOnClickListener {
-            if(binding.autoSwitch.isChecked) {
-                PrivateDNSUtils.setPrivateMode(requireActivity().contentResolver, PrivateDNSUtils.DNS_MODE_AUTO)
-                Toast.makeText(context, "DNS Server Set to Auto", Toast.LENGTH_SHORT).show()
-            } else {
-                PrivateDNSUtils.setPrivateMode(requireActivity().contentResolver, PrivateDNSUtils.DNS_MODE_PRIVATE)
-                Toast.makeText(context, "DNS Server Set", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     override fun onDestroy() {
