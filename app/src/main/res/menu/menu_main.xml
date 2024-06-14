@@ -2,10 +2,11 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/enable_auto"
-        android:checkable="true"
-        android:title="@string/menu_auto_enabled"
-        app:showAsAction="never" />
+        android:id="@+id/options"
+        android:title="@string/options"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_settings_24"
+        />
     <item android:id="@+id/privacy_policy"
         android:title="@string/menu_privacy_policy"
         app:showAsAction="never" />

@@ -23,11 +23,11 @@ import rikka.shizuku.ShizukuProvider
 import rikka.shizuku.SystemServiceHelper
 import ru.karasevm.privatednstoggle.databinding.ActivityMainBinding
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper
-import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
 
 
-class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogListener, DeleteServerDialogFragment.NoticeDialogListener, Shizuku.OnRequestPermissionResultListener {
+class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogListener,
+    DeleteServerDialogFragment.NoticeDialogListener, Shizuku.OnRequestPermissionResultListener {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var binding: ActivityMainBinding
@@ -72,25 +72,19 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                     true
                 }
 
-                R.id.enable_auto -> {
-                    if (!item.isChecked){
-                        Toast.makeText(this, R.string.auto_mode_clarification, Toast.LENGTH_LONG).show()
-                    }
-                    sharedPrefs.autoMode = item.isChecked
-                    item.setChecked(!item.isChecked)
+                R.id.options -> {
+                    val newFragment = OptionsDialogFragment()
+                    newFragment.show(supportFragmentManager, "options")
                     true
                 }
+
                 else -> true
             }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
-        val curVal = sharedPrefs.autoMode
         menuInflater.inflate(R.menu.menu_main, menu)
-        menu?.findItem(R.id.enable_auto)?.setChecked(curVal)
-
         return true
     }
 

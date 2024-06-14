@@ -18,4 +18,10 @@
     <string name="delete">Delete</string>
     <string name="server_length_error">Server address cannot be empty</string>
     <string name="add_edittext_hint">DNS server address</string>
+    <string name="options">Options</string>
+    <string name="ok">OK</string>
+    <string name="auto_option_description">Choose which options to include in the tile</string>
+    <string name="auto_option_only_off">Only off</string>
+    <string name="auto_option_only_auto">Only auto</string>
+    <string name="auto_option_off_and_auto">Off and auto</string>
 </resources>

@@ -14,6 +14,10 @@ object PrivateDNSUtils {
     const val DNS_MODE_AUTO = "opportunistic"
     const val DNS_MODE_PRIVATE = "hostname"
 
+    const val AUTO_MODE_OPTION_OFF = 0
+    const val AUTO_MODE_OPTION_AUTO = 1
+    const val AUTO_MODE_OPTION_OFF_AUTO = 2
+
     private const val PRIVATE_DNS_MODE = "private_dns_mode"
     private const val PRIVATE_DNS_PROVIDER = "private_dns_specifier"
 
@@ -34,7 +38,11 @@ object PrivateDNSUtils {
     }
 
     fun checkForPermission(context: Context): Boolean {
-        if (checkSelfPermission(context, Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(
+                context,
+                Manifest.permission.WRITE_SECURE_SETTINGS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             return true
         }
         Toast.makeText(context, R.string.permission_missing, Toast.LENGTH_SHORT).show()

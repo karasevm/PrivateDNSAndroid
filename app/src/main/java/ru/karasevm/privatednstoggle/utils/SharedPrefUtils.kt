@@ -6,8 +6,7 @@ import android.content.SharedPreferences
 object PreferenceHelper {
 
     private const val DNS_SERVERS = "dns_servers"
-    private const val AUTO_MODE = "auto_enabled"
-
+    private const val AUTO_MODE = "auto_mode"
     fun defaultPreference(context: Context): SharedPreferences =
         context.getSharedPreferences("app_prefs", 0)
 
@@ -38,10 +37,11 @@ object PreferenceHelper {
         }
 
     var SharedPreferences.autoMode
-        get() = getBoolean(AUTO_MODE, false)
+        get() = getInt(AUTO_MODE, PrivateDNSUtils.AUTO_MODE_OPTION_OFF)
         set(value) {
             editMe {
                 it.put(AUTO_MODE to value)
             }
         }
+
 }

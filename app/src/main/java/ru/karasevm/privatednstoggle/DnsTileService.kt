@@ -8,6 +8,8 @@ import ru.karasevm.privatednstoggle.utils.PreferenceHelper
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.AUTO_MODE_OPTION_AUTO
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_AUTO
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_OFF
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_PRIVATE
@@ -37,10 +39,10 @@ class DnsTileService : TileService() {
         val sharedPrefs = PreferenceHelper.defaultPreference(this)
 
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
-            if (sharedPrefs.autoMode) {
+            if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO || sharedPrefs.autoMode == AUTO_MODE_OPTION_OFF_AUTO) {
                 changeTileState(
                     qsTile,
-                    Tile.STATE_ACTIVE,
+                    Tile.STATE_INACTIVE,
                     getString(R.string.dns_auto),
                     R.drawable.ic_auto_black_24dp,
                     DNS_MODE_AUTO,
@@ -55,28 +57,39 @@ class DnsTileService : TileService() {
                     DNS_MODE_PRIVATE,
                     getNextAddress(dnsProvider)
                 )
-
             }
 
         } else if (dnsMode == null || dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
             changeTileState(
                 qsTile,
                 Tile.STATE_ACTIVE,
-                getNextAddress(dnsProvider),
+                getNextAddress(null),
                 R.drawable.ic_private_black_24dp,
                 DNS_MODE_PRIVATE,
-                getNextAddress(dnsProvider)
+                getNextAddress(null)
             )
         } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
             if (getNextAddress(dnsProvider) == null) {
-                changeTileState(
-                    qsTile,
-                    Tile.STATE_INACTIVE,
-                    getString(R.string.dns_off),
-                    R.drawable.ic_off_black_24dp,
-                    DNS_MODE_OFF,
-                    getNextAddress(dnsProvider)
-                )
+                if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO) {
+                    changeTileState(
+                        qsTile,
+                        Tile.STATE_INACTIVE,
+                        getString(R.string.dns_auto),
+                        R.drawable.ic_auto_black_24dp,
+                        DNS_MODE_AUTO,
+                        dnsProvider
+                    )
+                } else {
+                    changeTileState(
+                        qsTile,
+                        Tile.STATE_INACTIVE,
+                        getString(R.string.dns_off),
+                        R.drawable.ic_off_black_24dp,
+                        DNS_MODE_OFF,
+                        getNextAddress(dnsProvider)
+                    )
+                }
+
             } else {
                 changeTileState(
                     qsTile,
@@ -120,7 +133,7 @@ class DnsTileService : TileService() {
         } else if (dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
             refreshTile(
                 qsTile,
-                Tile.STATE_ACTIVE,
+                Tile.STATE_INACTIVE,
                 getString(R.string.dns_auto),
                 R.drawable.ic_auto_black_24dp
             )

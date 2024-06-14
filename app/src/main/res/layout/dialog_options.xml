@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/autoOptionRadioGroup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="17dp"
+    android:paddingEnd="17dp"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/autoOptionHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="@string/auto_option_description"
+        android:textSize="16sp" />
+
+    <RadioButton
+        android:id="@+id/autoOptionOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auto_option_only_off" />
+
+    <RadioButton
+        android:id="@+id/autoOptionAuto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auto_option_only_auto" />
+
+    <RadioButton
+        android:id="@+id/autoOptionOffAuto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auto_option_off_and_auto" />
+</RadioGroup>
