@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="17dp"
-    android:paddingEnd="17dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingEnd="17dp">
 
     <TextView
         android:id="@+id/autoOptionHeader"

@@ -1,8 +1,8 @@
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="ic_launcher_background">#498EE8</color>
 
-    <color name="seed">#6750A4</color>
+    <color name="seed" tools:keep="@color/seed">#6750A4</color>
     <color name="md_theme_light_primary">#6750A4</color>
     <color name="md_theme_light_secondary">#625B71</color>
     <color name="md_theme_light_tertiary">#7D5260</color>

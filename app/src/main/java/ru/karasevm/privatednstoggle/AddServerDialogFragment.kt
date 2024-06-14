@@ -28,7 +28,7 @@ class AddServerDialogFragment : DialogFragment() {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     interface NoticeDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment, server: String)
+        fun onDialogPositiveClick(server: String)
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
@@ -62,14 +62,15 @@ class AddServerDialogFragment : DialogFragment() {
             builder.setTitle(R.string.add_server)
                 .setView(view)
                 // Add action buttons
-                .setPositiveButton(R.string.menu_add
+                .setPositiveButton(
+                    R.string.menu_add
                 ) { _, _ ->
                     listener.onDialogPositiveClick(
-                        this,
                         binding.editTextServerAddr.text.toString().trim()
                     )
                 }
-                .setNegativeButton(R.string.cancel
+                .setNegativeButton(
+                    R.string.cancel
                 ) { _, _ ->
                     dialog?.cancel()
                 }
@@ -79,7 +80,6 @@ class AddServerDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-
         val button = ((dialog) as AlertDialog).getButton(DialogInterface.BUTTON_POSITIVE)
         binding.editTextServerAddr.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

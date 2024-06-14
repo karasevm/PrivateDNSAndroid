@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
@@ -67,7 +66,10 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         binding.topAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.privacy_policy -> {
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy"))
+                    val browserIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy")
+                    )
                     startActivity(browserIntent)
                     true
                 }
@@ -128,7 +130,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         Shizuku.removeRequestPermissionResultListener(this::onRequestPermissionResult)
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment, server: String) {
+    override fun onDialogPositiveClick(server: String) {
         if (server.isEmpty()) {
             Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
             return
@@ -139,7 +141,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         sharedPrefs.dns_servers = items
     }
 
-    override fun onDialogPositiveClick(dialog: DialogFragment,position: Int) {
+    override fun onDialogPositiveClick(position: Int) {
         items.removeAt(position)
         adapter.setData(items.toMutableList())
         adapter.notifyItemRemoved(position)
@@ -194,7 +196,9 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 finish()
             }
         }
+
     }
+
     @SuppressLint("PrivateApi")
     override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
         val isGranted = grantResult == PackageManager.PERMISSION_GRANTED
@@ -202,7 +206,10 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         if (isGranted) {
             grantPermissionWithShizuku()
         } else if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/"))
+            val browserIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+            )
             startActivity(browserIntent)
             finish()
         }

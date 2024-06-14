@@ -210,7 +210,7 @@ class DnsTileService : TileService() {
         val index = items.indexOf(currentAddress)
 
         if (index == -1 || currentAddress == null) {
-                return items[0]
+            return items[0]
         }
         if (index == items.size - 1) {
             return null

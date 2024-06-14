@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-class DeleteServerDialogFragment(private val position: Int): DialogFragment() {
+class DeleteServerDialogFragment(private val position: Int) : DialogFragment() {
     // Use this instance of the interface to deliver action events
     private lateinit var listener: NoticeDialogListener
 
@@ -15,7 +15,7 @@ class DeleteServerDialogFragment(private val position: Int): DialogFragment() {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     interface NoticeDialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment, position: Int)
+        fun onDialogPositiveClick(position: Int)
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
@@ -27,21 +27,26 @@ class DeleteServerDialogFragment(private val position: Int): DialogFragment() {
             listener = context as NoticeDialogListener
         } catch (e: ClassCastException) {
             // The activity doesn't implement the interface, throw exception
-            throw ClassCastException((context.toString() +
-                    " must implement NoticeDialogListener"))
+            throw ClassCastException(
+                (context.toString() +
+                        " must implement NoticeDialogListener")
+            )
         }
     }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = MaterialAlertDialogBuilder(it)
 
             builder.setTitle(R.string.delete_question)
                 .setMessage(R.string.delete_message)
-                .setPositiveButton(R.string.delete
+                .setPositiveButton(
+                    R.string.delete
                 ) { _, _ ->
-                    listener.onDialogPositiveClick(this, position)
+                    listener.onDialogPositiveClick(position)
                 }
-                .setNegativeButton(R.string.cancel
+                .setNegativeButton(
+                    R.string.cancel
                 ) { _, _ ->
                     dialog?.cancel()
                 }

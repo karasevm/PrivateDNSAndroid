@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
 import ru.karasevm.privatednstoggle.R
 
+@Suppress("unused")
 object PrivateDNSUtils {
     const val DNS_MODE_OFF = "off"
     const val DNS_MODE_AUTO = "opportunistic"
