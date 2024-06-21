@@ -7,6 +7,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.karasevm.privatednstoggle.databinding.DialogOptionsBinding
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.requireUnlock
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils
 
 class OptionsDialogFragment : DialogFragment() {
@@ -45,6 +46,12 @@ class OptionsDialogFragment : DialogFragment() {
                 R.id.autoOptionOffAuto -> sharedPrefs.autoMode =
                     PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO
             }
+        }
+
+        val requireUnlock = sharedPrefs.requireUnlock
+        binding.requireUnlockSwitch.isChecked = requireUnlock
+        binding.requireUnlockSwitch.setOnCheckedChangeListener { _, isChecked ->
+            sharedPrefs.requireUnlock = isChecked
         }
     }
 }

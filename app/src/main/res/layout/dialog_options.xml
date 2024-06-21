@@ -1,35 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/autoOptionRadioGroup"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="17dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="17dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/autoOptionHeader"
-        android:layout_width="wrap_content"
+    <RadioGroup
+        android:id="@+id/autoOptionRadioGroup"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:text="@string/auto_option_description"
+        android:paddingStart="17dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="17dp">
+
+        <TextView
+            android:id="@+id/autoOptionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/auto_option_description"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/autoOptionOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_option_only_off" />
+
+        <RadioButton
+            android:id="@+id/autoOptionAuto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_option_only_auto" />
+
+        <RadioButton
+            android:id="@+id/autoOptionOffAuto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_option_off_and_auto" />
+
+
+    </RadioGroup>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="5dp" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/requireUnlockSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/require_unlock_setting"
         android:textSize="16sp" />
 
-    <RadioButton
-        android:id="@+id/autoOptionOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/auto_option_only_off" />
-
-    <RadioButton
-        android:id="@+id/autoOptionAuto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/auto_option_only_auto" />
-
-    <RadioButton
-        android:id="@+id/autoOptionOffAuto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/auto_option_off_and_auto" />
-</RadioGroup>
+</LinearLayout>

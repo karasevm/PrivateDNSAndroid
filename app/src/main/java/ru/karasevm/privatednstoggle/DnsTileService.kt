@@ -7,6 +7,7 @@ import android.service.quicksettings.TileService
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.requireUnlock
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.AUTO_MODE_OPTION_AUTO
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO
@@ -27,17 +28,14 @@ class DnsTileService : TileService() {
         qsTile.updateTile()
     }
 
-    override fun onClick() {
-        super.onClick()
-        if (!checkForPermission(this)) {
-            return
-        }
-
+    /**
+     *  Set's the state of the tile to the next state
+     */
+    private fun cycleState() {
         val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
         val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")
 
         val sharedPrefs = PreferenceHelper.defaultPreference(this)
-
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
             if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO || sharedPrefs.autoMode == AUTO_MODE_OPTION_OFF_AUTO) {
                 changeTileState(
@@ -101,6 +99,21 @@ class DnsTileService : TileService() {
                 )
             }
         }
+    }
+
+    override fun onClick() {
+        super.onClick()
+        if (!checkForPermission(this)) {
+            return
+        }
+        val sharedPrefs = PreferenceHelper.defaultPreference(this)
+        val requireUnlock = sharedPrefs.requireUnlock
+        if (isLocked && requireUnlock) {
+            unlockAndRun(this::cycleState)
+        } else {
+            cycleState()
+        }
+
 
     }
 
@@ -150,7 +163,7 @@ class DnsTileService : TileService() {
     }
 
     /**
-     * Updates tile  to specified parameters
+     * Updates tile to specified parameters
      *
      * @param tile tile to update
      * @param state tile state

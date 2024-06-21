@@ -7,6 +7,8 @@ object PreferenceHelper {
 
     private const val DNS_SERVERS = "dns_servers"
     private const val AUTO_MODE = "auto_mode"
+    private const val REQUIRE_UNLOCK = "require_unlock"
+
     fun defaultPreference(context: Context): SharedPreferences =
         context.getSharedPreferences("app_prefs", 0)
 
@@ -41,6 +43,14 @@ object PreferenceHelper {
         set(value) {
             editMe {
                 it.put(AUTO_MODE to value)
+            }
+        }
+
+    var SharedPreferences.requireUnlock
+        get() = getBoolean(REQUIRE_UNLOCK, false)
+        set(value) {
+            editMe {
+                it.put(REQUIRE_UNLOCK to value)
             }
         }
 
