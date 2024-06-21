@@ -1,0 +1,1 @@
+Quick settings tile to switch active private DNS server

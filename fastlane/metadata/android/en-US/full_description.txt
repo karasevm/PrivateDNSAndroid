@@ -1,0 +1,6 @@
+Private DNS Quick Toggle is a quick settings tile to switch your private dns provider. 
+Supports any number of providers. Makes it easy to turn adblocking dns servers on or off with just a single tap.
+
+<b>Permissions</b>
+Requires WRITE_SECURE_SETTINGS permission to change the private dns settings. 
+The permission must be provided either with Shizuku or manually through adb.

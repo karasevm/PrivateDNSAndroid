@@ -1,0 +1,2 @@
+Changelog for latest release is available on GitHub:
+https://github.com/karasevm/PrivateDNSAndroid/releases/latest
