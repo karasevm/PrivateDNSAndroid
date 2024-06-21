@@ -1,0 +1,2 @@
+- Add option to require unlocking the device to use the tile
+- Fix invisible nav buttons on some devices
