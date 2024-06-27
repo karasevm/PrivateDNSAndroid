@@ -38,6 +38,7 @@ class OptionsDialogFragment : DialogFragment() {
             PrivateDNSUtils.AUTO_MODE_OPTION_OFF -> binding.autoOptionRadioGroup.check(R.id.autoOptionOff)
             PrivateDNSUtils.AUTO_MODE_OPTION_AUTO -> binding.autoOptionRadioGroup.check(R.id.autoOptionAuto)
             PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO -> binding.autoOptionRadioGroup.check(R.id.autoOptionOffAuto)
+            PrivateDNSUtils.AUTO_MODE_OPTION_PRIVATE -> binding.autoOptionRadioGroup.check(R.id.autoOptionPrivate)
         }
         binding.autoOptionRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -45,6 +46,7 @@ class OptionsDialogFragment : DialogFragment() {
                 R.id.autoOptionAuto -> sharedPrefs.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_AUTO
                 R.id.autoOptionOffAuto -> sharedPrefs.autoMode =
                     PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO
+                R.id.autoOptionPrivate -> sharedPrefs.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_PRIVATE
             }
         }
 

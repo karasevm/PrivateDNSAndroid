@@ -38,6 +38,12 @@
             android:layout_height="wrap_content"
             android:text="@string/auto_option_off_and_auto" />
 
+        <RadioButton
+            android:id="@+id/autoOptionPrivate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_option_only_private" />
+
 
     </RadioGroup>
 

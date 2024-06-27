@@ -11,6 +11,7 @@ import ru.karasevm.privatednstoggle.utils.PreferenceHelper.requireUnlock
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.AUTO_MODE_OPTION_AUTO
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO
+import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.AUTO_MODE_OPTION_PRIVATE
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_AUTO
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_OFF
 import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils.DNS_MODE_PRIVATE
@@ -38,6 +39,43 @@ class DnsTileService : TileService() {
         val sharedPrefs = PreferenceHelper.defaultPreference(this)
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
             if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO || sharedPrefs.autoMode == AUTO_MODE_OPTION_OFF_AUTO) {
+                changeDNSServer(DNS_MODE_AUTO, dnsProvider)
+            } else {
+                changeDNSServer(DNS_MODE_PRIVATE, dnsProvider)
+            }
+
+        } else if (dnsMode == null || dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
+            changeDNSServer(DNS_MODE_PRIVATE, null)
+        } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
+            if (getNextAddress(dnsProvider) == null) {
+                if (sharedPrefs.autoMode == AUTO_MODE_OPTION_PRIVATE) {
+                    changeDNSServer(DNS_MODE_PRIVATE, null)
+                } else {
+                    if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO) {
+                        changeDNSServer(DNS_MODE_AUTO,dnsProvider)
+                    } else {
+                        changeDNSServer(DNS_MODE_OFF, dnsProvider)
+                    }
+                }
+            } else {
+                changeDNSServer(DNS_MODE_PRIVATE, dnsProvider)
+            }
+        }
+    }
+
+    private fun changeDNSServer(server: String, dnsProvider: String?) {
+        when (server) {
+            DNS_MODE_OFF -> {
+                changeTileState(
+                    qsTile,
+                    Tile.STATE_INACTIVE,
+                    getString(R.string.dns_off),
+                    R.drawable.ic_off_black_24dp,
+                    DNS_MODE_OFF,
+                    getNextAddress(dnsProvider)
+                )
+            }
+            DNS_MODE_AUTO -> {
                 changeTileState(
                     qsTile,
                     Tile.STATE_INACTIVE,
@@ -46,49 +84,8 @@ class DnsTileService : TileService() {
                     DNS_MODE_AUTO,
                     dnsProvider
                 )
-            } else {
-                changeTileState(
-                    qsTile,
-                    Tile.STATE_ACTIVE,
-                    getNextAddress(dnsProvider),
-                    R.drawable.ic_private_black_24dp,
-                    DNS_MODE_PRIVATE,
-                    getNextAddress(dnsProvider)
-                )
             }
-
-        } else if (dnsMode == null || dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
-            changeTileState(
-                qsTile,
-                Tile.STATE_ACTIVE,
-                getNextAddress(null),
-                R.drawable.ic_private_black_24dp,
-                DNS_MODE_PRIVATE,
-                getNextAddress(null)
-            )
-        } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
-            if (getNextAddress(dnsProvider) == null) {
-                if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO) {
-                    changeTileState(
-                        qsTile,
-                        Tile.STATE_INACTIVE,
-                        getString(R.string.dns_auto),
-                        R.drawable.ic_auto_black_24dp,
-                        DNS_MODE_AUTO,
-                        dnsProvider
-                    )
-                } else {
-                    changeTileState(
-                        qsTile,
-                        Tile.STATE_INACTIVE,
-                        getString(R.string.dns_off),
-                        R.drawable.ic_off_black_24dp,
-                        DNS_MODE_OFF,
-                        getNextAddress(dnsProvider)
-                    )
-                }
-
-            } else {
+            DNS_MODE_PRIVATE -> {
                 changeTileState(
                     qsTile,
                     Tile.STATE_ACTIVE,
