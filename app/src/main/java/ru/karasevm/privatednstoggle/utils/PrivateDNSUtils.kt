@@ -18,6 +18,7 @@ object PrivateDNSUtils {
     const val AUTO_MODE_OPTION_OFF = 0
     const val AUTO_MODE_OPTION_AUTO = 1
     const val AUTO_MODE_OPTION_OFF_AUTO = 2
+    const val AUTO_MODE_OPTION_PRIVATE = 3
 
     private const val PRIVATE_DNS_MODE = "private_dns_mode"
     private const val PRIVATE_DNS_PROVIDER = "private_dns_specifier"
