@@ -1,0 +1,4 @@
+- Support for selection of only Private DNS in Option Dialog by @InfiniteCoder06
+- Support Labels by @InfiniteCoder06
+- Feature: Reordring by @InfiniteCoder06
+- Possible tile update fix
