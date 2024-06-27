@@ -15,6 +15,7 @@
     <string name="delete_message">Are you sure you want to delete server?</string>
     <string name="delete">Delete</string>
     <string name="server_length_error">Server address cannot be empty</string>
+    <string name="add_edittext_label_hint">DNS server Label (Optional)</string>
     <string name="add_edittext_hint">DNS server address</string>
     <string name="options">Options</string>
     <string name="ok">OK</string>

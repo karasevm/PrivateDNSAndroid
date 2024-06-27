@@ -28,7 +28,7 @@ class AddServerDialogFragment : DialogFragment() {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     interface NoticeDialogListener {
-        fun onDialogPositiveClick(server: String)
+        fun onDialogPositiveClick(label: String? ,server: String)
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
@@ -66,6 +66,7 @@ class AddServerDialogFragment : DialogFragment() {
                     R.string.menu_add
                 ) { _, _ ->
                     listener.onDialogPositiveClick(
+                        binding.editTextServerHint.text.toString().trim(),
                         binding.editTextServerAddr.text.toString().trim()
                     )
                 }

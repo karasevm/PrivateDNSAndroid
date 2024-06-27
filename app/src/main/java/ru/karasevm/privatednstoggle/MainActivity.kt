@@ -130,12 +130,16 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         Shizuku.removeRequestPermissionResultListener(this::onRequestPermissionResult)
     }
 
-    override fun onDialogPositiveClick(server: String) {
+    override fun onDialogPositiveClick(label: String?, server: String) {
         if (server.isEmpty()) {
             Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
             return
         }
-        items.add(server)
+        if(label.isNullOrEmpty()) {
+            items.add(server)
+        } else {
+            items.add("$label : $server")
+        }
         adapter.setData(items.toMutableList())
         binding.recyclerView.adapter?.notifyItemInserted(items.size - 1)
         sharedPrefs.dns_servers = items
