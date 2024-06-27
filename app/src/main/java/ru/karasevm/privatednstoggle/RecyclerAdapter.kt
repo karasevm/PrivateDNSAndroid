@@ -28,18 +28,17 @@ class RecyclerAdapter(private val items: MutableList<String>, private val showDr
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
         val item = items[position]
         val parts = item.split(" : ")
-        if(parts.size == 2){
+        if (parts.size == 2) {
             holder.labelTextView.text = parts[0]
             holder.textView.text = parts[1]
-        } else{
+        } else {
             holder.labelTextView.visibility = View.GONE
             holder.textView.text = parts[0]
         }
 
-        if(showDragHandle) {
+        if (showDragHandle) {
             holder.dragHandle.visibility = View.VISIBLE
-            holder.dragHandle.setOnTouchListener {
-                    _, event ->
+            holder.dragHandle.setOnTouchListener { _, event ->
                 if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                     onDragStart?.invoke(holder)
                 }

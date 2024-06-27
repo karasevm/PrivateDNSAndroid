@@ -53,7 +53,7 @@ class DnsTileService : TileService() {
                     changeDNSServer(DNS_MODE_PRIVATE, null)
                 } else {
                     if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO) {
-                        changeDNSServer(DNS_MODE_AUTO,dnsProvider)
+                        changeDNSServer(DNS_MODE_AUTO, dnsProvider)
                     } else {
                         changeDNSServer(DNS_MODE_OFF, dnsProvider)
                     }
@@ -76,6 +76,7 @@ class DnsTileService : TileService() {
                     null
                 )
             }
+
             DNS_MODE_AUTO -> {
                 changeTileState(
                     qsTile,
@@ -86,6 +87,7 @@ class DnsTileService : TileService() {
                     dnsProvider
                 )
             }
+
             DNS_MODE_PRIVATE -> {
                 changeTileState(
                     qsTile,
@@ -153,7 +155,7 @@ class DnsTileService : TileService() {
             val sharedPrefs = PreferenceHelper.defaultPreference(this)
             val items = sharedPrefs.dns_servers.map {
                 val parts = it.split(" : ")
-                if(parts.size == 2)
+                if (parts.size == 2)
                     DnsServer(parts[0], parts[1])
                 else
                     DnsServer(parts[0], parts[0])
@@ -166,8 +168,7 @@ class DnsTileService : TileService() {
                     "Google",
                     R.drawable.ic_private_black_24dp
                 )
-            }
-            else {
+            } else {
                 val index = items.indexOfFirst { it.server == dnsProvider }
                 if (index == -1) {
                     refreshTile(
@@ -242,7 +243,7 @@ class DnsTileService : TileService() {
         val items = sharedPrefs.dns_servers.map {
             val parts = it.split(" : ")
             // Assuming string is in the format "$label : $server"
-            if(parts.size == 2)
+            if (parts.size == 2)
                 DnsServer(parts[0], parts[1])
             else
                 DnsServer(parts[0], parts[0])

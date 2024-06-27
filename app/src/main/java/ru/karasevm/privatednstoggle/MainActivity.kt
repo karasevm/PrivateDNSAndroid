@@ -41,8 +41,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     private val itemTouchHelper by lazy {
         val simpleItemTouchCallback =
-            object : ItemTouchHelper.SimpleCallback(UP or
-                    DOWN, 0) {
+            object : ItemTouchHelper.SimpleCallback(UP or DOWN, 0) {
 
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -55,7 +54,10 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
 
-                override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                override fun onSelectedChanged(
+                    viewHolder: RecyclerView.ViewHolder?,
+                    actionState: Int
+                ) {
                     super.onSelectedChanged(viewHolder, actionState)
                     if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
                         viewHolder?.itemView?.apply {
@@ -67,7 +69,10 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                     }
                 }
 
-                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                override fun clearView(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ) {
                     super.clearView(recyclerView, viewHolder)
                     viewHolder.itemView.apply {
                         // Reset the appearance
@@ -108,14 +113,14 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             sharedPrefs.dns_servers = swapedItems
         }
         adapter.onDragStart = { viewHolder ->
-            itemTouchHelper.startDrag(viewHolder);
+            itemTouchHelper.startDrag(viewHolder)
         }
         binding.floatingActionButton.setOnClickListener {
             val newFragment = AddServerDialogFragment()
             newFragment.show(supportFragmentManager, "add_server")
         }
         binding.recyclerView.adapter = adapter
-        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
         binding.topAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -189,7 +194,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
             return
         }
-        if(label.isNullOrEmpty()) {
+        if (label.isNullOrEmpty()) {
             items.add(server)
         } else {
             items.add("$label : $server")

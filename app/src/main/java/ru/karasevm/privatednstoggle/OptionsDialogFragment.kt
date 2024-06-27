@@ -46,7 +46,9 @@ class OptionsDialogFragment : DialogFragment() {
                 R.id.autoOptionAuto -> sharedPrefs.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_AUTO
                 R.id.autoOptionOffAuto -> sharedPrefs.autoMode =
                     PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO
-                R.id.autoOptionPrivate -> sharedPrefs.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_PRIVATE
+
+                R.id.autoOptionPrivate -> sharedPrefs.autoMode =
+                    PrivateDNSUtils.AUTO_MODE_OPTION_PRIVATE
             }
         }
 
