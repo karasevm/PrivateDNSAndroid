@@ -1,9 +1,14 @@
 package ru.karasevm.privatednstoggle
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.drawable.Icon
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import androidx.core.content.ContextCompat
 import ru.karasevm.privatednstoggle.utils.DnsServer
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
@@ -117,34 +122,27 @@ class DnsTileService : TileService() {
 
     }
 
-    override fun onStartListening() {
-        super.onStartListening()
-        if (!checkForPermission(this)) {
-            return
-        }
+    /**
+     *  Refreshes the state of the tile
+     */
+    private fun refreshTile() {
         val dnsMode = Settings.Global.getString(contentResolver, "private_dns_mode")
-
-        // Prevent some crashes
-        if (qsTile == null) {
-            return
-        }
-
         if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
-            refreshTile(
+            setTile(
                 qsTile,
                 Tile.STATE_INACTIVE,
                 getString(R.string.dns_off),
                 R.drawable.ic_off_black_24dp
             )
         } else if (dnsMode == null) {
-            refreshTile(
+            setTile(
                 qsTile,
                 Tile.STATE_INACTIVE,
                 getString(R.string.dns_unknown),
                 R.drawable.ic_unknown_black_24dp
             )
         } else if (dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
-            refreshTile(
+            setTile(
                 qsTile,
                 Tile.STATE_INACTIVE,
                 getString(R.string.dns_auto),
@@ -162,7 +160,7 @@ class DnsTileService : TileService() {
             }
 
             if (items.isEmpty() || items[0].server == "") {
-                refreshTile(
+                setTile(
                     qsTile,
                     Tile.STATE_ACTIVE,
                     "Google",
@@ -171,14 +169,14 @@ class DnsTileService : TileService() {
             } else {
                 val index = items.indexOfFirst { it.server == dnsProvider }
                 if (index == -1) {
-                    refreshTile(
+                    setTile(
                         qsTile,
                         Tile.STATE_ACTIVE,
                         dnsProvider,
                         R.drawable.ic_private_black_24dp
                     )
                 } else {
-                    refreshTile(
+                    setTile(
                         qsTile,
                         Tile.STATE_ACTIVE,
                         items[index].label,
@@ -187,7 +185,38 @@ class DnsTileService : TileService() {
                 }
             }
         }
+    }
 
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            refreshTile()
+        }
+    }
+
+    override fun onStartListening() {
+        super.onStartListening()
+        if (!checkForPermission(this)) {
+            return
+        }
+
+        // Prevent some crashes
+        if (qsTile == null) {
+            return
+        }
+        ContextCompat.registerReceiver(
+            this,
+            broadcastReceiver,
+            IntentFilter("refresh_tile"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+
+        refreshTile()
+
+    }
+
+    override fun onStopListening() {
+        super.onStopListening()
+        unregisterReceiver(broadcastReceiver)
     }
 
     /**
@@ -198,7 +227,7 @@ class DnsTileService : TileService() {
      * @param label tile label
      * @param icon tile icon
      */
-    private fun refreshTile(tile: Tile, state: Int, label: String?, icon: Int) {
+    private fun setTile(tile: Tile, state: Int, label: String?, icon: Int) {
         tile.state = state
         tile.label = label
         tile.icon = Icon.createWithResource(this, icon)

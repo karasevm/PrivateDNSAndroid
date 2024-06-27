@@ -100,8 +100,8 @@ class DNSServerDialogFragment : DialogFragment() {
                     ).show()
                 }
             }
-
             dialog?.dismiss()
+            requireContext().sendBroadcast(Intent("refresh_tile").setPackage(requireContext().packageName))
         }
 
     }
