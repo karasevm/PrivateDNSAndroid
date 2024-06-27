@@ -6,23 +6,17 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.IPackageManager
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.permission.IPermissionManager
 import android.util.Log
-import android.util.TypedValue
 import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
-import androidx.recyclerview.widget.ItemTouchHelper.END
-import androidx.recyclerview.widget.ItemTouchHelper.START
 import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -216,7 +210,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
      * Attempts to grant WRITE_SECURE_SETTINGS permission with Shizuku
      */
     private fun grantPermissionWithShizuku() {
-        val packageName = "ru.karasevm.privatednstoggle"
+        val packageName = applicationContext.packageName
         runCatching {
             if (Build.VERSION.SDK_INT >= 31) {
                 HiddenApiBypass.addHiddenApiExemptions("Landroid/permission")
