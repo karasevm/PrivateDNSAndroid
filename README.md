@@ -1,3 +1,7 @@
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/karasevm/PrivateDNSAndroid/total)](https://github.com/karasevm/PrivateDNSAndroid/releases/latest)
+[![GitHub Release](https://img.shields.io/github/v/release/karasevm/PrivateDNSAndroid)](https://github.com/karasevm/PrivateDNSAndroid/releases/latest)
+[![IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/ru.karasevm.privatednstoggle&label=IzzyOnDroid)](https://apt.izzysoft.de/fdroid/index/apk/ru.karasevm.privatednstoggle)
+
 # Private DNS Quick Toggle
 A quick settings tile to switch your private dns provider. Supports any number of providers. Makes it easy to turn adblocking dns servers on or off with just
 a single tap.
@@ -5,7 +9,8 @@ a single tap.
 ![Private DNS app screenshot](readme.jpg)
 
 ## Installation
-Get the latest apk on the [releases page](https://github.com/karasevm/PrivateDNSAndroid/releases/latest).
+Get the latest apk on the [releases page](https://github.com/karasevm/PrivateDNSAndroid/releases/latest) 
+or from [IzzyOnDroid repo](https://apt.izzysoft.de/fdroid/index/apk/ru.karasevm.privatednstoggle).
 
 ## Automatic (Shizuku)
 1. Install and start [Shizuku](https://shizuku.rikka.app/).
