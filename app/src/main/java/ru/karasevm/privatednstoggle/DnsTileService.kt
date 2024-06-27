@@ -73,7 +73,7 @@ class DnsTileService : TileService() {
                     getString(R.string.dns_off),
                     R.drawable.ic_off_black_24dp,
                     DNS_MODE_OFF,
-                    getNextAddress(dnsProvider)
+                    null
                 )
             }
             DNS_MODE_AUTO -> {
