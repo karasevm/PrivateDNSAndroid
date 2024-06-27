@@ -172,12 +172,21 @@ class DnsTileService : TileService() {
             }
             else {
                 val index = items.indexOfFirst { it.server == dnsProvider }
-                refreshTile(
-                    qsTile,
-                    Tile.STATE_ACTIVE,
-                    items[index].label,
-                    R.drawable.ic_private_black_24dp
-                )
+                if (index == -1) {
+                    refreshTile(
+                        qsTile,
+                        Tile.STATE_ACTIVE,
+                        dnsProvider,
+                        R.drawable.ic_private_black_24dp
+                    )
+                } else {
+                    refreshTile(
+                        qsTile,
+                        Tile.STATE_ACTIVE,
+                        items[index].label,
+                        R.drawable.ic_private_black_24dp
+                    )
+                }
             }
         }
 
