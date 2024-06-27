@@ -4,6 +4,7 @@ import android.graphics.drawable.Icon
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import ru.karasevm.privatednstoggle.utils.DnsServer
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
@@ -50,10 +51,10 @@ class DnsTileService : TileService() {
                 changeTileState(
                     qsTile,
                     Tile.STATE_ACTIVE,
-                    getNextAddress(dnsProvider),
+                    getNextAddress(dnsProvider)?.label,
                     R.drawable.ic_private_black_24dp,
                     DNS_MODE_PRIVATE,
-                    getNextAddress(dnsProvider)
+                    getNextAddress(dnsProvider)?.server
                 )
             }
 
@@ -61,10 +62,10 @@ class DnsTileService : TileService() {
             changeTileState(
                 qsTile,
                 Tile.STATE_ACTIVE,
-                getNextAddress(null),
+                getNextAddress(null)?.label,
                 R.drawable.ic_private_black_24dp,
                 DNS_MODE_PRIVATE,
-                getNextAddress(null)
+                getNextAddress(null)?.server
             )
         } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
             if (getNextAddress(dnsProvider) == null) {
@@ -84,7 +85,7 @@ class DnsTileService : TileService() {
                         getString(R.string.dns_off),
                         R.drawable.ic_off_black_24dp,
                         DNS_MODE_OFF,
-                        getNextAddress(dnsProvider)
+                        getNextAddress(dnsProvider)?.server
                     )
                 }
 
@@ -92,10 +93,10 @@ class DnsTileService : TileService() {
                 changeTileState(
                     qsTile,
                     Tile.STATE_ACTIVE,
-                    getNextAddress(dnsProvider),
+                    getNextAddress(dnsProvider)?.label,
                     R.drawable.ic_private_black_24dp,
                     DNS_MODE_PRIVATE,
-                    getNextAddress(dnsProvider)
+                    getNextAddress(dnsProvider)?.server
                 )
             }
         }
@@ -152,12 +153,32 @@ class DnsTileService : TileService() {
             )
         } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
             val dnsProvider = Settings.Global.getString(contentResolver, "private_dns_specifier")
-            refreshTile(
-                qsTile,
-                Tile.STATE_ACTIVE,
-                dnsProvider,
-                R.drawable.ic_private_black_24dp
-            )
+            val sharedPrefs = PreferenceHelper.defaultPreference(this)
+            val items = sharedPrefs.dns_servers.map {
+                val parts = it.split(" : ")
+                if(parts.size == 2)
+                    DnsServer(parts[0], parts[1])
+                else
+                    DnsServer(parts[0], parts[0])
+            }
+
+            if (items.isEmpty() || items[0].server == "") {
+                refreshTile(
+                    qsTile,
+                    Tile.STATE_ACTIVE,
+                    "Google",
+                    R.drawable.ic_private_black_24dp
+                )
+            }
+            else {
+                val index = items.indexOfFirst { it.server == dnsProvider }
+                refreshTile(
+                    qsTile,
+                    Tile.STATE_ACTIVE,
+                    items[index].label,
+                    R.drawable.ic_private_black_24dp
+                )
+            }
         }
 
     }
@@ -210,17 +231,26 @@ class DnsTileService : TileService() {
      * @param currentAddress currently set address
      * @return next address
      */
-    private fun getNextAddress(currentAddress: String?): String? {
+    private fun getNextAddress(currentAddress: String?): DnsServer? {
         val sharedPrefs = PreferenceHelper.defaultPreference(this)
-        val items = sharedPrefs.dns_servers
+        val items = sharedPrefs.dns_servers.map {
+            val parts = it.split(" : ")
+            // Assuming string is in the format "$label : $server"
+            if(parts.size == 2)
+                DnsServer(parts[0], parts[1])
+            else
+                DnsServer(parts[0], parts[0])
+        }.toMutableList()
 
         // Fallback if list is empty
-        if (items[0] == "") {
-            items.removeAt(0)
-            items.add("dns.google")
+        if (items.isEmpty() || items[0].server == "") {
+            items.apply {
+                removeAt(0)
+                add(DnsServer("Google", "dns.google"))
+            }
         }
 
-        val index = items.indexOf(currentAddress)
+        val index = items.indexOfFirst { it.server == currentAddress }
 
         if (index == -1 || currentAddress == null) {
             return items[0]

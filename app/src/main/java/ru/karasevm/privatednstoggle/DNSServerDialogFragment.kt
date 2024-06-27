@@ -84,7 +84,7 @@ class DNSServerDialogFragment : DialogFragment() {
                 }
 
                 else -> {
-                    val server = items[position]
+                    val server = items[position].split(" : ").last()
                     PrivateDNSUtils.setPrivateMode(
                         requireActivity().contentResolver,
                         PrivateDNSUtils.DNS_MODE_PRIVATE
