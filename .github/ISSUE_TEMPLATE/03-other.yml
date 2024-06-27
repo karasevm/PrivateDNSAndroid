@@ -1,0 +1,9 @@
+name: Other
+description: If other options don't fit your question.
+body:
+  - type: textarea
+    id: other
+    attributes:
+      label: Ask a question
+    validations:
+      required: true
