@@ -44,7 +44,7 @@ class DNSServerDialogFragment : DialogFragment() {
             items.add(0, resources.getString(R.string.dns_auto))
             items.add(0, resources.getString(R.string.dns_off))
 
-            adapter = RecyclerAdapter(items)
+            adapter = RecyclerAdapter(items, false)
             binding.recyclerView.adapter = adapter
 
 

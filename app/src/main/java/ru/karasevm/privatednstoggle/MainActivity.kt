@@ -6,15 +6,26 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.IPackageManager
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.permission.IPermissionManager
 import android.util.Log
+import android.util.TypedValue
 import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.DOWN
+import androidx.recyclerview.widget.ItemTouchHelper.END
+import androidx.recyclerview.widget.ItemTouchHelper.START
+import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuBinderWrapper
@@ -34,6 +45,47 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var adapter: RecyclerAdapter
 
+    private val itemTouchHelper by lazy {
+        val simpleItemTouchCallback =
+            object : ItemTouchHelper.SimpleCallback(UP or
+                    DOWN, 0) {
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+                    return true
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+                override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                    super.onSelectedChanged(viewHolder, actionState)
+                    if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                        viewHolder?.itemView?.apply {
+                            // Example: Elevate the view
+                            elevation = 8f
+                            alpha = 0.5f
+                            setBackgroundColor(Color.GRAY)
+                        }
+                    }
+                }
+
+                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                    super.clearView(recyclerView, viewHolder)
+                    viewHolder.itemView.apply {
+                        // Reset the appearance
+                        elevation = 0f
+                        alpha = 1.0f
+                        setBackgroundColor(Color.TRANSPARENT)
+                    }
+                }
+            }
+        ItemTouchHelper(simpleItemTouchCallback)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,16 +104,24 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         if (items[0] == "") {
             items.removeAt(0)
         }
-        adapter = RecyclerAdapter(items)
+        adapter = RecyclerAdapter(items, true)
         adapter.onItemClick = { position ->
             val newFragment = DeleteServerDialogFragment(position)
             newFragment.show(supportFragmentManager, "delete_server")
+        }
+        adapter.onItemsChanged = { swapedItems ->
+            items = swapedItems
+            sharedPrefs.dns_servers = swapedItems
+        }
+        adapter.onDragStart = { viewHolder ->
+            itemTouchHelper.startDrag(viewHolder);
         }
         binding.floatingActionButton.setOnClickListener {
             val newFragment = AddServerDialogFragment()
             newFragment.show(supportFragmentManager, "add_server")
         }
         binding.recyclerView.adapter = adapter
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         binding.topAppBar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
