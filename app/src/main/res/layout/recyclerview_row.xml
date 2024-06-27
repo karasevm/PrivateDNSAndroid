@@ -19,9 +19,9 @@
 
     <ImageView
         android:id="@+id/dragHandle"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="-20dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="32dp"
         android:src="@drawable/ic_drag_handle_24"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
