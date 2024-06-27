@@ -29,4 +29,5 @@
     <string name="set_to_auto_toast">Private DNS set to auto</string>
     <string name="set_to_provider_toast">Private DNS set to %1$s</string>
     <string name="require_unlock_setting">Require unlocking the device to change server</string>
+    <string name="a11y_drag_handle">Drag handle</string>
 </resources>

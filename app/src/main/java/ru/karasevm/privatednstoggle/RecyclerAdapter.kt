@@ -27,9 +27,15 @@ class RecyclerAdapter(private val items: MutableList<String>, private val showDr
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
         val item = items[position]
+        val parts = item.split(" : ")
+        if(parts.size == 2){
+            holder.labelTextView.text = parts[0]
+            holder.textView.text = parts[1]
+        } else{
+            holder.labelTextView.visibility = View.GONE
+            holder.textView.text = parts[0]
+        }
 
-        // sets the text to the textview from our itemHolder class
-        holder.textView.text = item
         if(showDragHandle) {
             holder.dragHandle.visibility = View.VISIBLE
             holder.dragHandle.setOnTouchListener {
@@ -56,6 +62,7 @@ class RecyclerAdapter(private val items: MutableList<String>, private val showDr
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.textView)
+        val labelTextView: TextView = itemView.findViewById(R.id.labelTextView)
         val dragHandle: ImageView = itemView.findViewById(R.id.dragHandle)
 
         init {
