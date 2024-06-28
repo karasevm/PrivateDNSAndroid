@@ -11,3 +11,13 @@
 ```
 
 6. That's it, you should have the app installed.
+
+
+## Exceptions
+Some problems when granting permission through adb
+
+### MIUI (Xiaomi, POCO)
+Enable "USB debugging (Security options)" in "Developer options". Note that this is a separate option from "USB debugging".
+
+### ColorOS (OPPO & OnePlus)
+Disable "Permission monitoring" in "Developer options".
