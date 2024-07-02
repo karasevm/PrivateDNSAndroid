@@ -26,7 +26,7 @@ object PreferenceHelper {
             is Boolean -> putBoolean(key, value)
             is Long -> putLong(key, value)
             is Float -> putFloat(key, value)
-            else -> error("Only primitive types can be stored in SharedPreferences")
+            else -> error("Only primitive types can be stored in SharedPreferences, got ${value.javaClass}")
         }
     }
 
@@ -54,4 +54,23 @@ object PreferenceHelper {
             }
         }
 
+    // export all the preferences
+    fun SharedPreferences.export() = mapOf(
+        DNS_SERVERS to getString(DNS_SERVERS, ""),
+        AUTO_MODE to autoMode,
+        REQUIRE_UNLOCK to requireUnlock
+    )
+
+    // import all the preferences
+    fun SharedPreferences.import(map: Map<String, Any>) {
+        editMe {
+            map.forEach { (key, value) ->
+                if (value is Number) {
+                    it.put(key to value.toInt())
+                    return@forEach
+                }
+                it.put(key to value)
+            }
+        }
+    }
 }

@@ -30,4 +30,10 @@
     <string name="set_to_provider_toast">Private DNS set to %1$s</string>
     <string name="require_unlock_setting">Require unlocking the device to change server</string>
     <string name="a11y_drag_handle">Drag handle</string>
+    <string name="menu_import">Import from clipboard</string>
+    <string name="menu_export">Export to clipboard</string>
+    <string name="import_success">Imported</string>
+    <string name="import_failure">Import failed</string>
+    <string name="import_failure_json">Import failed, malformed JSON</string>
+    <string name="copy_success">Copied</string>
 </resources>

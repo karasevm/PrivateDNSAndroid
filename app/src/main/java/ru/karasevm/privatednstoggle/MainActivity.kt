@@ -1,7 +1,10 @@
 package ru.karasevm.privatednstoggle
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.IPackageManager
@@ -15,11 +18,17 @@ import android.util.Log
 import android.view.Menu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
 import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonSyntaxException
+import com.google.gson.ToNumberPolicy
+import com.google.gson.reflect.TypeToken
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuBinderWrapper
@@ -28,6 +37,8 @@ import rikka.shizuku.SystemServiceHelper
 import ru.karasevm.privatednstoggle.databinding.ActivityMainBinding
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper
 import ru.karasevm.privatednstoggle.utils.PreferenceHelper.dns_servers
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.export
+import ru.karasevm.privatednstoggle.utils.PreferenceHelper.import
 
 
 class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogListener,
@@ -38,50 +49,49 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
     private var items = mutableListOf<String>()
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var adapter: RecyclerAdapter
+    private lateinit var clipboard: ClipboardManager
+    private lateinit var gson: Gson
 
     private val itemTouchHelper by lazy {
-        val simpleItemTouchCallback =
-            object : ItemTouchHelper.SimpleCallback(UP or DOWN, 0) {
+        val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(UP or DOWN, 0) {
 
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
-                    return true
-                }
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+                return true
+            }
 
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
 
-                override fun onSelectedChanged(
-                    viewHolder: RecyclerView.ViewHolder?,
-                    actionState: Int
-                ) {
-                    super.onSelectedChanged(viewHolder, actionState)
-                    if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-                        viewHolder?.itemView?.apply {
-                            // Example: Elevate the view
-                            elevation = 8f
-                            alpha = 0.5f
-                            setBackgroundColor(Color.GRAY)
-                        }
-                    }
-                }
-
-                override fun clearView(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ) {
-                    super.clearView(recyclerView, viewHolder)
-                    viewHolder.itemView.apply {
-                        // Reset the appearance
-                        elevation = 0f
-                        alpha = 1.0f
-                        setBackgroundColor(Color.TRANSPARENT)
+            override fun onSelectedChanged(
+                viewHolder: RecyclerView.ViewHolder?, actionState: Int
+            ) {
+                super.onSelectedChanged(viewHolder, actionState)
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                    viewHolder?.itemView?.apply {
+                        // Example: Elevate the view
+                        elevation = 8f
+                        alpha = 0.5f
+                        setBackgroundColor(Color.GRAY)
                     }
                 }
             }
+
+            override fun clearView(
+                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder
+            ) {
+                super.clearView(recyclerView, viewHolder)
+                viewHolder.itemView.apply {
+                    // Reset the appearance
+                    elevation = 0f
+                    alpha = 1.0f
+                    setBackgroundColor(Color.TRANSPARENT)
+                }
+            }
+        }
         ItemTouchHelper(simpleItemTouchCallback)
     }
 
@@ -98,6 +108,8 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         binding.recyclerView.layoutManager = linearLayoutManager
 
         sharedPrefs = PreferenceHelper.defaultPreference(this)
+        clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        gson = GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create()
 
         items = sharedPrefs.dns_servers
         if (items[0] == "") {
@@ -108,9 +120,9 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             val newFragment = DeleteServerDialogFragment(position)
             newFragment.show(supportFragmentManager, "delete_server")
         }
-        adapter.onItemsChanged = { swapedItems ->
-            items = swapedItems
-            sharedPrefs.dns_servers = swapedItems
+        adapter.onItemsChanged = { swappedItems ->
+            items = swappedItems
+            sharedPrefs.dns_servers = swappedItems
         }
         adapter.onDragStart = { viewHolder ->
             itemTouchHelper.startDrag(viewHolder)
@@ -130,6 +142,54 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                         Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy")
                     )
                     startActivity(browserIntent)
+                    true
+                }
+
+                R.id.export_settings -> {
+                    val data = sharedPrefs.export()
+                    val jsonData = gson.toJson(data)
+                    clipboard.setPrimaryClip(ClipData.newPlainText("", jsonData))
+                    // Only show a toast for Android 12 and lower.
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) Toast.makeText(
+                        this, getString(R.string.copy_success), Toast.LENGTH_SHORT
+                    ).show()
+                    true
+                }
+
+                R.id.import_settings -> {
+                    val clipData = clipboard.primaryClip?.getItemAt(0)
+                    val textData = clipData?.text
+
+                    if (textData != null) {
+                        runCatching {
+                            val jsonData = textData.toString()
+                            val objectType = object : TypeToken<Map<String, Any>>() {}.type
+                            val data: Map<String, Any> = gson.fromJson(jsonData, objectType)
+                            sharedPrefs.import(data)
+                        }.onSuccess {
+                            Toast.makeText(
+                                this, getString(R.string.import_success), Toast.LENGTH_SHORT
+                            ).show()
+                            ActivityCompat.recreate(this)
+                        }.onFailure { exception ->
+                            Log.e("IMPORT", "Import failed", exception)
+                            when (exception) {
+                                is JsonSyntaxException -> {
+                                    Toast.makeText(
+                                        this,
+                                        getString(R.string.import_failure_json),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                else -> {
+                                    Toast.makeText(
+                                        this, getString(R.string.import_failure), Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
                     true
                 }
 
@@ -184,6 +244,23 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         }
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (!hasFocus) {
+            // Gets the ID of the "paste" menu item.
+            val pasteItem = binding.topAppBar.menu.findItem(R.id.import_settings)
+
+            // If the clipboard doesn't contain data, disable the paste menu item.
+            // If it does contain data, decide whether you can handle the data.
+            pasteItem.isEnabled = when {
+                !clipboard.hasPrimaryClip() -> false
+                !(clipboard.primaryClipDescription?.hasMimeType(MIMETYPE_TEXT_PLAIN))!! -> false
+                else -> true
+
+            }
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Shizuku.removeRequestPermissionResultListener(this::onRequestPermissionResult)
@@ -224,9 +301,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 val pm = IPermissionManager.Stub.asInterface(binder)
                 runCatching {
                     pm.grantRuntimePermission(
-                        packageName,
-                        Manifest.permission.WRITE_SECURE_SETTINGS,
-                        0
+                        packageName, Manifest.permission.WRITE_SECURE_SETTINGS, 0
                     )
                 }.onFailure { _ ->
                     if (Build.VERSION.SDK_INT >= 34) {
@@ -242,9 +317,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 val binder = ShizukuBinderWrapper(SystemServiceHelper.getSystemService("package"))
                 val pm = IPackageManager.Stub.asInterface(binder)
                 pm.grantRuntimePermission(
-                    packageName,
-                    Manifest.permission.WRITE_SECURE_SETTINGS,
-                    0
+                    packageName, Manifest.permission.WRITE_SECURE_SETTINGS, 0
                 )
             }
         }.onFailure { e ->
@@ -252,8 +325,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         }.also {
             if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
                 val browserIntent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+                    Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
                 )
                 startActivity(browserIntent)
                 finish()
@@ -262,7 +334,6 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     }
 
-    @SuppressLint("PrivateApi")
     override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
         val isGranted = grantResult == PackageManager.PERMISSION_GRANTED
 
@@ -270,8 +341,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             grantPermissionWithShizuku()
         } else if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             val browserIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+                Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
             )
             startActivity(browserIntent)
             finish()

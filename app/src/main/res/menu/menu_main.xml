@@ -7,6 +7,12 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_settings_24"
         />
+    <item android:id="@+id/import_settings"
+        android:title="@string/menu_import"
+        app:showAsAction="never" />
+    <item android:id="@+id/export_settings"
+        android:title="@string/menu_export"
+        app:showAsAction="never" />
     <item android:id="@+id/privacy_policy"
         android:title="@string/menu_privacy_policy"
         app:showAsAction="never" />

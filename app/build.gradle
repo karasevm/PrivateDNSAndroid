@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.guava:guava:33.1.0-android'
+    implementation 'com.google.code.gson:gson:2.11.0'
 
     def shizuku_version = '13.1.5'
     implementation "dev.rikka.shizuku:api:$shizuku_version"
@@ -60,6 +61,6 @@ dependencies {
     compileOnly 'dev.rikka.hidden:stub:4.3.2'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
