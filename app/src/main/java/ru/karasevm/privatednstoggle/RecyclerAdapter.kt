@@ -29,6 +29,7 @@ class RecyclerAdapter(private val items: MutableList<String>, private val showDr
         val item = items[position]
         val parts = item.split(" : ")
         if (parts.size == 2) {
+            holder.labelTextView.visibility = View.VISIBLE
             holder.labelTextView.text = parts[0]
             holder.textView.text = parts[1]
         } else {
