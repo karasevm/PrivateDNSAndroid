@@ -7,12 +7,33 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_settings_24"
         />
-    <item android:id="@+id/import_settings"
+    <item android:id="@+id/import_settings_submenu"
         android:title="@string/menu_import"
-        app:showAsAction="never" />
+        app:showAsAction="never" >
+        <menu>
+            <item android:id="@+id/import_settings_file"
+                android:title="@string/menu_import_from_file"
+                app:showAsAction="never" />
+            <item android:id="@+id/import_settings_clipboard"
+                android:title="@string/menu_import_from_clipboard"
+                app:showAsAction="never" />
+        </menu>
+    </item>
     <item android:id="@+id/export_settings"
         android:title="@string/menu_export"
-        app:showAsAction="never" />
+        app:showAsAction="never" >
+        <menu>
+            <item android:id="@+id/export_settings_clipboard"
+                android:title="@string/menu_export_to_clipboard"
+                app:showAsAction="never" />
+            <item android:id="@+id/export_settings_share"
+                android:title="@string/menu_export_share"
+                app:showAsAction="never" />
+            <item android:id="@+id/export_settings_file"
+                android:title="@string/menu_export_to_file"
+                app:showAsAction="never" />
+        </menu>
+    </item>
     <item android:id="@+id/privacy_policy"
         android:title="@string/menu_privacy_policy"
         app:showAsAction="never" />

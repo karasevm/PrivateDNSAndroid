@@ -1,6 +1,7 @@
 package ru.karasevm.privatednstoggle
 
 import android.Manifest
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
@@ -17,8 +18,10 @@ import android.permission.IPermissionManager
 import android.util.Log
 import android.view.Menu
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ShareCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
 import androidx.recyclerview.widget.ItemTouchHelper.UP
@@ -95,6 +98,34 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         ItemTouchHelper(simpleItemTouchCallback)
     }
 
+    private fun importSettings(json: String) {
+        runCatching {
+            val objectType = object : TypeToken<Map<String, Any>>() {}.type
+            val data: Map<String, Any> = gson.fromJson(json, objectType)
+            sharedPrefs.import(data)
+        }.onSuccess {
+            Toast.makeText(
+                this, getString(R.string.import_success), Toast.LENGTH_SHORT
+            ).show()
+            ActivityCompat.recreate(this)
+        }.onFailure { exception ->
+            Log.e("IMPORT", "Import failed", exception)
+            when (exception) {
+                is JsonSyntaxException -> {
+                    Toast.makeText(
+                        this, getString(R.string.import_failure_json), Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                else -> {
+                    Toast.makeText(
+                        this, getString(R.string.import_failure), Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -145,7 +176,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                     true
                 }
 
-                R.id.export_settings -> {
+                R.id.export_settings_clipboard -> {
                     val data = sharedPrefs.export()
                     val jsonData = gson.toJson(data)
                     clipboard.setPrimaryClip(ClipData.newPlainText("", jsonData))
@@ -156,39 +187,39 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                     true
                 }
 
-                R.id.import_settings -> {
+                R.id.export_settings_share -> {
+                    val data = sharedPrefs.export()
+                    val jsonData = gson.toJson(data)
+                    ShareCompat.IntentBuilder(this).setText(jsonData).setType("text/plain")
+                        .startChooser()
+                    true
+                }
+
+                R.id.export_settings_file -> {
+                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TITLE, "private-dns-export")
+                    }
+                    saveResultLauncher.launch(intent)
+                    true
+                }
+
+                R.id.import_settings_file -> {
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "text/plain"
+                    }
+                    importResultLauncher.launch(intent)
+                    true
+                }
+
+                R.id.import_settings_clipboard -> {
                     val clipData = clipboard.primaryClip?.getItemAt(0)
                     val textData = clipData?.text
 
                     if (textData != null) {
-                        runCatching {
-                            val jsonData = textData.toString()
-                            val objectType = object : TypeToken<Map<String, Any>>() {}.type
-                            val data: Map<String, Any> = gson.fromJson(jsonData, objectType)
-                            sharedPrefs.import(data)
-                        }.onSuccess {
-                            Toast.makeText(
-                                this, getString(R.string.import_success), Toast.LENGTH_SHORT
-                            ).show()
-                            ActivityCompat.recreate(this)
-                        }.onFailure { exception ->
-                            Log.e("IMPORT", "Import failed", exception)
-                            when (exception) {
-                                is JsonSyntaxException -> {
-                                    Toast.makeText(
-                                        this,
-                                        getString(R.string.import_failure_json),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                                else -> {
-                                    Toast.makeText(
-                                        this, getString(R.string.import_failure), Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
+                        importSettings(textData.toString())
                     }
                     true
                 }
@@ -203,6 +234,45 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             }
         }
     }
+
+    private var saveResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                data?.data?.also { uri ->
+                    val jsonData = gson.toJson(sharedPrefs.export())
+                    val contentResolver = applicationContext.contentResolver
+                    runCatching {
+                        contentResolver.openOutputStream(uri)?.use { outputStream ->
+                            outputStream.write(jsonData.toByteArray())
+                        }
+                    }.onFailure { exception ->
+                        Log.e("EXPORT", "Export failed", exception)
+                        Toast.makeText(
+                            this, getString(R.string.export_failure), Toast.LENGTH_SHORT
+                        ).show()
+                    }.onSuccess {
+                        Toast.makeText(
+                            this, getString(R.string.export_success), Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+    private var importResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                data?.data?.also { uri ->
+                    val contentResolver = applicationContext.contentResolver
+                    contentResolver.openInputStream(uri)?.use { inputStream ->
+                        val jsonData = inputStream.bufferedReader().use { it.readText() }
+                        importSettings(jsonData)
+                    }
+                }
+            }
+        }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -248,7 +318,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         super.onWindowFocusChanged(hasFocus)
         if (!hasFocus) {
             // Gets the ID of the "paste" menu item.
-            val pasteItem = binding.topAppBar.menu.findItem(R.id.import_settings)
+            val pasteItem = binding.topAppBar.menu.findItem(R.id.import_settings_clipboard)
 
             // If the clipboard doesn't contain data, disable the paste menu item.
             // If it does contain data, decide whether you can handle the data.
