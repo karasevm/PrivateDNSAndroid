@@ -1,0 +1,2 @@
+- Settings export/import
+- Fix label not appearing in some cases
