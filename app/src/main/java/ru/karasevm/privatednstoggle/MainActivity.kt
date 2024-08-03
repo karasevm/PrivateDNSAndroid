@@ -148,8 +148,22 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         }
         adapter = RecyclerAdapter(items, true)
         adapter.onItemClick = { position ->
-            val newFragment = DeleteServerDialogFragment(position)
-            newFragment.show(supportFragmentManager, "delete_server")
+//            Instead of delete a edit dialog is shown, housing the option to delete as well as edit a server
+//            val newFragment = DeleteServerDialogFragment(position)
+//            newFragment.show(supportFragmentManager, "delete_server")
+            val data = items[position].split(" : ")
+            val label: String?
+            val server: String
+            if (data.size == 2) {
+                label = data[0]
+                server = data[1]
+            }
+            else {
+                label = null
+                server = data[0]
+            }
+            val newFragment = AddServerDialogFragment(position, label, server)
+            newFragment.show(supportFragmentManager, "edit_server")
         }
         adapter.onItemsChanged = { swappedItems ->
             items = swappedItems
@@ -159,7 +173,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             itemTouchHelper.startDrag(viewHolder)
         }
         binding.floatingActionButton.setOnClickListener {
-            val newFragment = AddServerDialogFragment()
+            val newFragment = AddServerDialogFragment(null, null, null)
             newFragment.show(supportFragmentManager, "add_server")
         }
         binding.recyclerView.adapter = adapter
@@ -336,6 +350,11 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         Shizuku.removeRequestPermissionResultListener(this::onRequestPermissionResult)
     }
 
+    override fun onDeleteItemClicked(position: Int) {
+        val newFragment = DeleteServerDialogFragment(position)
+        newFragment.show(supportFragmentManager, "delete_server")
+    }
+
     override fun onDialogPositiveClick(label: String?, server: String) {
         if (server.isEmpty()) {
             Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
@@ -356,6 +375,21 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         adapter.setData(items.toMutableList())
         adapter.notifyItemRemoved(position)
         sharedPrefs.dns_servers = items
+    }
+
+    override fun onDialogPositiveClick(label: String?, server: String, position: Int) {
+        if (server.isEmpty()) {
+            Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (label.isNullOrEmpty()) {
+            items[position] = server
+        } else {
+            items[position] = "$label : $server"
+        }
+        adapter.notifyItemChanged(position)
+        sharedPrefs.dns_servers = items
+        binding.recyclerView.adapter?.notifyItemChanged(position)
     }
 
     /**
