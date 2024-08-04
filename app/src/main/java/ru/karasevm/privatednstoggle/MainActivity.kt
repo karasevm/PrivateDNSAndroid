@@ -1,11 +1,9 @@
 package ru.karasevm.privatednstoggle
 
 import android.Manifest
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.IPackageManager
@@ -17,6 +15,7 @@ import android.os.Bundle
 import android.permission.IPermissionManager
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -139,18 +138,17 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         binding.recyclerView.layoutManager = linearLayoutManager
 
         sharedPrefs = PreferenceHelper.defaultPreference(this)
-        clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         gson = GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create()
 
         items = sharedPrefs.dns_servers
         if (items[0] == "") {
             items.removeAt(0)
         }
-        adapter = RecyclerAdapter(items, true)
+
+        updateEmptyView()
+        adapter = RecyclerAdapter(items, true) { updateEmptyView() }
         adapter.onItemClick = { position ->
-//            Instead of delete a edit dialog is shown, housing the option to delete as well as edit a server
-//            val newFragment = DeleteServerDialogFragment(position)
-//            newFragment.show(supportFragmentManager, "delete_server")
             val data = items[position].split(" : ")
             val label: String?
             val server: String
@@ -168,6 +166,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         adapter.onItemsChanged = { swappedItems ->
             items = swappedItems
             sharedPrefs.dns_servers = swappedItems
+            updateEmptyView()
         }
         adapter.onDragStart = { viewHolder ->
             itemTouchHelper.startDrag(viewHolder)
@@ -249,9 +248,19 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         }
     }
 
+    private fun updateEmptyView() {
+        if (items.isEmpty()) {
+            binding.emptyView.visibility = View.VISIBLE
+            binding.emptyViewHint.visibility = View.VISIBLE
+        } else {
+            binding.emptyView.visibility = View.GONE
+            binding.emptyViewHint.visibility = View.GONE
+        }
+    }
+
     private var saveResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.also { uri ->
                     val jsonData = gson.toJson(sharedPrefs.export())
@@ -276,7 +285,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     private var importResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.also { uri ->
                     val contentResolver = applicationContext.contentResolver

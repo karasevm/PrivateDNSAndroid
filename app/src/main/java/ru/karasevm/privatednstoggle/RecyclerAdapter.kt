@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Collections
 
-class RecyclerAdapter(private val items: MutableList<String>, private val showDragHandle: Boolean) :
+class RecyclerAdapter(private val items: MutableList<String>, private val showDragHandle: Boolean, private val onDataChanged: () -> Unit) :
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     var onItemClick: ((Int) -> Unit)? = null
@@ -77,6 +77,7 @@ class RecyclerAdapter(private val items: MutableList<String>, private val showDr
             clear()
             addAll(newItems)
         }
+        onDataChanged()
     }
 
 

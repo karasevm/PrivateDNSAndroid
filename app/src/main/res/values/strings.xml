@@ -45,4 +45,6 @@
     <string name="export_failure">Saving failed</string>
     <string name="export_success">Saved successfully</string>
     <string name="edit_server">Edit server</string>
+    <string name="no_servers_added">No Servers Added</string>
+    <string name="empty_hint">Tap on the button below to add one</string>
 </resources>
