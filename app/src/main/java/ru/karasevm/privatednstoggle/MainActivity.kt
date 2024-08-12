@@ -1,11 +1,9 @@
 package ru.karasevm.privatednstoggle
 
 import android.Manifest
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.IPackageManager
@@ -17,6 +15,7 @@ import android.os.Bundle
 import android.permission.IPermissionManager
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -139,27 +138,41 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         binding.recyclerView.layoutManager = linearLayoutManager
 
         sharedPrefs = PreferenceHelper.defaultPreference(this)
-        clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         gson = GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create()
 
         items = sharedPrefs.dns_servers
         if (items[0] == "") {
             items.removeAt(0)
         }
-        adapter = RecyclerAdapter(items, true)
+
+        updateEmptyView()
+        adapter = RecyclerAdapter(items, true) { updateEmptyView() }
         adapter.onItemClick = { position ->
-            val newFragment = DeleteServerDialogFragment(position)
-            newFragment.show(supportFragmentManager, "delete_server")
+            val data = items[position].split(" : ")
+            val label: String?
+            val server: String
+            if (data.size == 2) {
+                label = data[0]
+                server = data[1]
+            }
+            else {
+                label = null
+                server = data[0]
+            }
+            val newFragment = AddServerDialogFragment(position, label, server)
+            newFragment.show(supportFragmentManager, "edit_server")
         }
         adapter.onItemsChanged = { swappedItems ->
             items = swappedItems
             sharedPrefs.dns_servers = swappedItems
+            updateEmptyView()
         }
         adapter.onDragStart = { viewHolder ->
             itemTouchHelper.startDrag(viewHolder)
         }
         binding.floatingActionButton.setOnClickListener {
-            val newFragment = AddServerDialogFragment()
+            val newFragment = AddServerDialogFragment(null, null, null)
             newFragment.show(supportFragmentManager, "add_server")
         }
         binding.recyclerView.adapter = adapter
@@ -235,9 +248,19 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         }
     }
 
+    private fun updateEmptyView() {
+        if (items.isEmpty()) {
+            binding.emptyView.visibility = View.VISIBLE
+            binding.emptyViewHint.visibility = View.VISIBLE
+        } else {
+            binding.emptyView.visibility = View.GONE
+            binding.emptyViewHint.visibility = View.GONE
+        }
+    }
+
     private var saveResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.also { uri ->
                     val jsonData = gson.toJson(sharedPrefs.export())
@@ -262,7 +285,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     private var importResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.also { uri ->
                     val contentResolver = applicationContext.contentResolver
@@ -336,6 +359,11 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         Shizuku.removeRequestPermissionResultListener(this::onRequestPermissionResult)
     }
 
+    override fun onDeleteItemClicked(position: Int) {
+        val newFragment = DeleteServerDialogFragment(position)
+        newFragment.show(supportFragmentManager, "delete_server")
+    }
+
     override fun onDialogPositiveClick(label: String?, server: String) {
         if (server.isEmpty()) {
             Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
@@ -356,6 +384,21 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         adapter.setData(items.toMutableList())
         adapter.notifyItemRemoved(position)
         sharedPrefs.dns_servers = items
+    }
+
+    override fun onDialogPositiveClick(label: String?, server: String, position: Int) {
+        if (server.isEmpty()) {
+            Toast.makeText(this, R.string.server_length_error, Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (label.isNullOrEmpty()) {
+            items[position] = server
+        } else {
+            items[position] = "$label : $server"
+        }
+        adapter.notifyItemChanged(position)
+        sharedPrefs.dns_servers = items
+        binding.recyclerView.adapter?.notifyItemChanged(position)
     }
 
     /**
