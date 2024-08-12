@@ -8,8 +8,8 @@ android {
 
     defaultConfig {
         applicationId "ru.karasevm.privatednstoggle"
-        versionCode 13
-        versionName "1.7"
+        versionCode 14
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         targetSdkVersion 34

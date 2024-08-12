@@ -1,0 +1,3 @@
+- Add an option to edit servers
+- Add placeholder for empty server list
+- Fix layout for longer server addresses
