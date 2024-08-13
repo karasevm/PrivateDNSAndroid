@@ -12,4 +12,6 @@
     <color name="md_theme_dark_secondary">#CCC2DC</color>
     <color name="md_theme_dark_tertiary">#EFB8C8</color>
     <color name="md_theme_dark_background">#1C1B1F</color>
+
+    <color name="material_dynamic_neutral50">#747879</color>
 </resources>
