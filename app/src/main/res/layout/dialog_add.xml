@@ -4,6 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/serverEnabledSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:maxWidth="320dp"
+        android:text="@string/add_server_enabled"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/editTextServerHintLayout"
         android:layout_width="match_parent"
@@ -12,7 +26,7 @@
         android:hint="@string/add_edittext_label_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/serverEnabledSwitch">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextServerHint"

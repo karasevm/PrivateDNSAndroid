@@ -1,4 +1,4 @@
-package ru.karasevm.privatednstoggle.utils
+package ru.karasevm.privatednstoggle.util
 
 import android.Manifest
 import android.content.ContentResolver
@@ -23,18 +23,23 @@ object PrivateDNSUtils {
     private const val PRIVATE_DNS_MODE = "private_dns_mode"
     private const val PRIVATE_DNS_PROVIDER = "private_dns_specifier"
 
+
+    // Gets the system dns mode
     fun getPrivateMode(contentResolver: ContentResolver): String {
         return Settings.Global.getString(contentResolver, PRIVATE_DNS_MODE)
     }
 
+    // Gets the system dns provider
     fun getPrivateProvider(contentResolver: ContentResolver): String {
         return Settings.Global.getString(contentResolver, PRIVATE_DNS_PROVIDER)
     }
 
+    // Sets the system dns mode
     fun setPrivateMode(contentResolver: ContentResolver, value: String) {
         Settings.Global.putString(contentResolver, PRIVATE_DNS_MODE, value)
     }
 
+    // Sets the system dns provider
     fun setPrivateProvider(contentResolver: ContentResolver, value: String?) {
         Settings.Global.putString(contentResolver, PRIVATE_DNS_PROVIDER, value)
     }
