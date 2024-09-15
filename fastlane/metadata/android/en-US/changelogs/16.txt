@@ -1,0 +1,7 @@
+- Replaced server storage backend with Room, allowing for easier further expansion
+- Add option to disable saved servers
+- Improved backup handling
+- Fixed desync bug while dragging servers
+- Reorganized source file structure
+- Updated Kotlin version
+- Updated Java version

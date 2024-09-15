@@ -1,4 +1,4 @@
-package ru.karasevm.privatednstoggle
+package ru.karasevm.privatednstoggle.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

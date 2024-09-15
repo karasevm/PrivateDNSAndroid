@@ -47,4 +47,5 @@
     <string name="edit_server">Edit server</string>
     <string name="no_servers_added">No Servers Added</string>
     <string name="empty_hint">Tap on the button below to add one</string>
+    <string name="add_server_enabled">Enabled</string>
 </resources>

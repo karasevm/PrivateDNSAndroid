@@ -1,4 +1,4 @@
-package ru.karasevm.privatednstoggle
+package ru.karasevm.privatednstoggle.ui
 
 import android.app.Dialog
 import android.content.Context
@@ -11,10 +11,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.common.net.InternetDomainName
+import ru.karasevm.privatednstoggle.R
 import ru.karasevm.privatednstoggle.databinding.DialogAddBinding
+import ru.karasevm.privatednstoggle.model.DnsServer
 
 
-class AddServerDialogFragment(private val position: Int?, private val label: String?, private val server: String?) : DialogFragment() {
+class AddServerDialogFragment(
+    private val dnsServer: DnsServer?
+) : DialogFragment() {
     // Use this instance of the interface to deliver action events
     private lateinit var listener: NoticeDialogListener
 
@@ -28,9 +32,9 @@ class AddServerDialogFragment(private val position: Int?, private val label: Str
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     interface NoticeDialogListener {
-        fun onDialogPositiveClick(label: String? ,server: String)
-        fun onDialogPositiveClick(label: String?, server: String, position: Int)
-        fun onDeleteItemClicked(position: Int)
+        fun onAddDialogPositiveClick(label: String?, server: String)
+        fun onUpdateDialogPositiveClick(id: Int, server: String, label: String?, enabled: Boolean)
+        fun onDeleteItemClicked(id: Int)
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
@@ -61,17 +65,21 @@ class AddServerDialogFragment(private val position: Int?, private val label: Str
             val view = binding.root
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
-            if (position != null) {
-                binding.editTextServerHint.setText(label)
-                binding.editTextServerAddr.setText(server)
+            if (dnsServer != null) {
+                binding.editTextServerHint.setText(dnsServer.label)
+                binding.editTextServerAddr.setText(dnsServer.server)
+                binding.serverEnabledSwitch.visibility = android.view.View.VISIBLE
+                binding.serverEnabledSwitch.isChecked = dnsServer.enabled
                 builder.setTitle(R.string.edit_server).setView(view)
                     .setPositiveButton(
                         R.string.menu_save
-                        ) { _, _ ->
-                            listener.onDialogPositiveClick(
-                                binding.editTextServerHint.text.toString().trim(),
-                                binding.editTextServerAddr.text.toString().trim(),
-                                position)
+                    ) { _, _ ->
+                        listener.onUpdateDialogPositiveClick(
+                            dnsServer.id,
+                            binding.editTextServerAddr.text.toString().trim(),
+                            binding.editTextServerHint.text.toString().trim(),
+                            binding.serverEnabledSwitch.isChecked
+                        )
                     }
                     .setNegativeButton(
                         R.string.cancel
@@ -81,17 +89,16 @@ class AddServerDialogFragment(private val position: Int?, private val label: Str
                     .setNeutralButton(
                         R.string.delete
                     ) { _, _ ->
-                        listener.onDeleteItemClicked(position)
-                        }
-            }
-            else {
+                        listener.onDeleteItemClicked(dnsServer.id)
+                    }
+            } else {
                 builder.setTitle(R.string.add_server)
                     .setView(view)
                     // Add action buttons
                     .setPositiveButton(
                         R.string.menu_add
                     ) { _, _ ->
-                        listener.onDialogPositiveClick(
+                        listener.onAddDialogPositiveClick(
                             binding.editTextServerHint.text.toString().trim(),
                             binding.editTextServerAddr.text.toString().trim()
                         )

@@ -1,13 +1,14 @@
-package ru.karasevm.privatednstoggle
+package ru.karasevm.privatednstoggle.ui
 
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import ru.karasevm.privatednstoggle.R
 
 
-class DeleteServerDialogFragment(private val position: Int) : DialogFragment() {
+class DeleteServerDialogFragment(private val id: Int) : DialogFragment() {
     // Use this instance of the interface to deliver action events
     private lateinit var listener: NoticeDialogListener
 
@@ -15,7 +16,7 @@ class DeleteServerDialogFragment(private val position: Int) : DialogFragment() {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     interface NoticeDialogListener {
-        fun onDialogPositiveClick(position: Int)
+        fun onDeleteDialogPositiveClick(id: Int)
     }
 
     // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
@@ -43,7 +44,7 @@ class DeleteServerDialogFragment(private val position: Int) : DialogFragment() {
                 .setPositiveButton(
                     R.string.delete
                 ) { _, _ ->
-                    listener.onDialogPositiveClick(position)
+                    listener.onDeleteDialogPositiveClick(id)
                 }
                 .setNegativeButton(
                     R.string.cancel

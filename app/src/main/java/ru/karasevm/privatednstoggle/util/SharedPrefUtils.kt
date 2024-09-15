@@ -1,13 +1,13 @@
-package ru.karasevm.privatednstoggle.utils
+package ru.karasevm.privatednstoggle.util
 
 import android.content.Context
 import android.content.SharedPreferences
 
 object PreferenceHelper {
 
-    private const val DNS_SERVERS = "dns_servers"
-    private const val AUTO_MODE = "auto_mode"
-    private const val REQUIRE_UNLOCK = "require_unlock"
+    const val DNS_SERVERS = "dns_servers"
+    const val AUTO_MODE = "auto_mode"
+    const val REQUIRE_UNLOCK = "require_unlock"
 
     fun defaultPreference(context: Context): SharedPreferences =
         context.getSharedPreferences("app_prefs", 0)
@@ -38,6 +38,7 @@ object PreferenceHelper {
             }
         }
 
+
     var SharedPreferences.autoMode
         get() = getInt(AUTO_MODE, PrivateDNSUtils.AUTO_MODE_OPTION_OFF)
         set(value) {
@@ -53,24 +54,4 @@ object PreferenceHelper {
                 it.put(REQUIRE_UNLOCK to value)
             }
         }
-
-    // export all the preferences
-    fun SharedPreferences.export() = mapOf(
-        DNS_SERVERS to getString(DNS_SERVERS, ""),
-        AUTO_MODE to autoMode,
-        REQUIRE_UNLOCK to requireUnlock
-    )
-
-    // import all the preferences
-    fun SharedPreferences.import(map: Map<String, Any>) {
-        editMe {
-            map.forEach { (key, value) ->
-                if (value is Number) {
-                    it.put(key to value.toInt())
-                    return@forEach
-                }
-                it.put(key to value)
-            }
-        }
-    }
 }

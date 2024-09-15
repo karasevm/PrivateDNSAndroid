@@ -1,14 +1,15 @@
-package ru.karasevm.privatednstoggle
+package ru.karasevm.privatednstoggle.ui
 
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import ru.karasevm.privatednstoggle.R
 import ru.karasevm.privatednstoggle.databinding.DialogOptionsBinding
-import ru.karasevm.privatednstoggle.utils.PreferenceHelper
-import ru.karasevm.privatednstoggle.utils.PreferenceHelper.autoMode
-import ru.karasevm.privatednstoggle.utils.PreferenceHelper.requireUnlock
-import ru.karasevm.privatednstoggle.utils.PrivateDNSUtils
+import ru.karasevm.privatednstoggle.util.PreferenceHelper
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.requireUnlock
+import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 
 class OptionsDialogFragment : DialogFragment() {
     private var _binding: DialogOptionsBinding? = null
@@ -27,6 +28,7 @@ class OptionsDialogFragment : DialogFragment() {
                 .setView(view)
                 .setPositiveButton(R.string.ok, null)
             builder.create()
+
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
