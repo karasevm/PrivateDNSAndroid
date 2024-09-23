@@ -47,4 +47,5 @@
     <string name="edit_server">编辑服务器条目</string>
     <string name="no_servers_added">无可用服务器</string>
     <string name="empty_hint">点击下方\"+\"添加一个吧</string>
+    <string name="add_server_enabled">已启用</string>
 </resources>
