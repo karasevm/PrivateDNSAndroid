@@ -27,12 +27,9 @@ import androidx.recyclerview.widget.ItemTouchHelper.DOWN
 import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonSyntaxException
-import com.google.gson.ToNumberPolicy
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuBinderWrapper
@@ -58,7 +55,6 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var adapter: ServerListRecyclerAdapter
     private lateinit var clipboard: ClipboardManager
-    private lateinit var gson: Gson
     private val dnsServerViewModel: DnsServerViewModel by viewModels { DnsServerViewModelFactory((application as PrivateDNSApp).repository) }
 
     private val itemTouchHelper by lazy {
@@ -126,7 +122,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     private fun importSettings(json: String) {
         runCatching {
-            val data: BackupUtils.Backup = gson.fromJson(json, BackupUtils.Backup::class.java)
+            val data: BackupUtils.Backup = Json.decodeFromString<BackupUtils.Backup>(json)
             BackupUtils.import(data, dnsServerViewModel, sharedPrefs)
         }.onSuccess {
             Toast.makeText(
@@ -134,28 +130,18 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             ).show()
         }.onFailure { exception ->
             runCatching {
-                val objectType = object : TypeToken<Map<String, Any>>() {}.type
-                val data: Map<String, Any> = gson.fromJson(json, objectType)
+                Log.e("IMPORT", "Malformed json, falling back to legacy", exception)
+                val data = Json.decodeFromString<BackupUtils.LegacyBackup>(json)
                 BackupUtils.importLegacy(data, dnsServerViewModel, sharedPrefs)
             }.onSuccess {
                 Toast.makeText(
                     this, getString(R.string.import_success), Toast.LENGTH_SHORT
                 ).show()
-            }.onFailure {
+            }.onFailure { exception ->
                 Log.e("IMPORT", "Import failed", exception)
-                when (exception) {
-                    is JsonSyntaxException -> {
-                        Toast.makeText(
-                            this, getString(R.string.import_failure_json), Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    else -> {
-                        Toast.makeText(
-                            this, getString(R.string.import_failure), Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                Toast.makeText(
+                    this, getString(R.string.import_failure), Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -193,7 +179,6 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
         sharedPrefs = PreferenceHelper.defaultPreference(this)
         clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-        gson = GsonBuilder().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create()
 
         migrateServerList()
 
@@ -249,7 +234,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 R.id.export_settings_clipboard -> {
                     dnsServerViewModel.viewModelScope.launch {
                         val data = BackupUtils.export(dnsServerViewModel, sharedPrefs)
-                        val jsonData = gson.toJson(data)
+                        val jsonData = Json.encodeToString(data)
                         clipboard.setPrimaryClip(ClipData.newPlainText("", jsonData))
                         // Only show a toast for Android 12 and lower.
                         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) Toast.makeText(
@@ -263,7 +248,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                     val activityContext = this
                     dnsServerViewModel.viewModelScope.launch {
                         val data = BackupUtils.export(dnsServerViewModel, sharedPrefs)
-                        val jsonData = gson.toJson(data)
+                        val jsonData = Json.encodeToString(data)
                         ShareCompat.IntentBuilder(activityContext).setText(jsonData)
                             .setType("text/plain")
                             .startChooser()
@@ -319,7 +304,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.also { uri ->
-                    val jsonData = gson.toJson(BackupUtils.export(dnsServerViewModel, sharedPrefs))
+                    val jsonData = Json.encodeToString(BackupUtils.export(dnsServerViewModel, sharedPrefs))
                     val contentResolver = applicationContext.contentResolver
                     runCatching {
                         contentResolver.openOutputStream(uri)?.use { outputStream ->

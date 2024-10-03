@@ -1,20 +1,26 @@
 package ru.karasevm.privatednstoggle.util
 
 import android.content.SharedPreferences
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import ru.karasevm.privatednstoggle.data.DnsServerViewModel
 import ru.karasevm.privatednstoggle.model.DnsServer
-import ru.karasevm.privatednstoggle.util.PreferenceHelper.AUTO_MODE
-import ru.karasevm.privatednstoggle.util.PreferenceHelper.DNS_SERVERS
-import ru.karasevm.privatednstoggle.util.PreferenceHelper.REQUIRE_UNLOCK
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoMode
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.requireUnlock
 
 object BackupUtils {
+    @Serializable
     data class Backup(
-        @SerializedName("dns_servers") val dnsServers: List<DnsServer>,
-        @SerializedName("auto_mode") val autoMode: Int?,
-        @SerializedName("require_unlock") val requireUnlock: Boolean?,
+        @SerialName("dns_servers") val dnsServers: List<DnsServer>,
+        @SerialName("auto_mode") val autoMode: Int?,
+        @SerialName("require_unlock") val requireUnlock: Boolean?,
+    )
+
+    @Serializable
+    data class LegacyBackup(
+        @SerialName("dns_servers") val dnsServers: String,
+        @SerialName("auto_mode") val autoMode: Int?,
+        @SerialName("require_unlock") val requireUnlock: Boolean?,
     )
 
     /**
@@ -47,17 +53,16 @@ object BackupUtils {
 
     /**
      *  Imports old server list
-     *  @param map Deserialized backup
+     *  @param legacyBackup Deserialized backup
      *  @param viewModel View model
      *  @param sharedPreferences Shared preferences
      */
     fun importLegacy(
-        map: Map<String, Any>,
+        legacyBackup: LegacyBackup,
         viewModel: DnsServerViewModel,
         sharedPreferences: SharedPreferences
     ) {
-        map[DNS_SERVERS]?.let { servers ->
-            if (servers is String) {
+        legacyBackup.dnsServers.let { servers ->
                 val serverList = servers.split(",")
                 serverList.forEach { server ->
                     val parts = server.split(" : ")
@@ -67,9 +72,8 @@ object BackupUtils {
                         viewModel.insert(DnsServer(0, server, ""))
                     }
                 }
-            }
         }
-        sharedPreferences.autoMode = map[AUTO_MODE] as? Int ?: 0
-        sharedPreferences.requireUnlock = map[REQUIRE_UNLOCK] as? Boolean ?: false
+        sharedPreferences.autoMode = legacyBackup.autoMode?: 0
+        sharedPreferences.requireUnlock = legacyBackup.requireUnlock?: false
     }
 }
