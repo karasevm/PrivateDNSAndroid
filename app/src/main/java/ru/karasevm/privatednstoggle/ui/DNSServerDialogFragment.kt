@@ -27,7 +27,7 @@ class DNSServerDialogFragment : DialogFragment() {
     private lateinit var adapter: ServerListRecyclerAdapter
     private var servers: MutableList<DnsServer> = mutableListOf()
     private val dnsServerViewModel: DnsServerViewModel by viewModels { DnsServerViewModelFactory((requireActivity().application as PrivateDNSApp).repository) }
-
+    private val contentResolver by lazy { requireActivity().contentResolver }
 
     override fun onCreateDialog(
         savedInstanceState: Bundle?
@@ -73,17 +73,23 @@ class DNSServerDialogFragment : DialogFragment() {
             when (id) {
                 OFF_ID -> {
                     PrivateDNSUtils.setPrivateMode(
-                        requireActivity().contentResolver,
+                        contentResolver,
                         PrivateDNSUtils.DNS_MODE_OFF
                     )
+                    PrivateDNSUtils.setPrivateProvider(
+                        contentResolver,
+                        null)
                     Toast.makeText(context, R.string.set_to_off_toast, Toast.LENGTH_SHORT).show()
                 }
 
                 AUTO_ID -> {
                     PrivateDNSUtils.setPrivateMode(
-                        requireActivity().contentResolver,
+                        contentResolver,
                         PrivateDNSUtils.DNS_MODE_AUTO
                     )
+                    PrivateDNSUtils.setPrivateProvider(
+                        contentResolver,
+                        null)
                     Toast.makeText(context, R.string.set_to_auto_toast, Toast.LENGTH_SHORT).show()
                 }
 
@@ -91,11 +97,11 @@ class DNSServerDialogFragment : DialogFragment() {
                     lifecycleScope.launch {
                         val server = servers.find { server -> server.id == id }
                         PrivateDNSUtils.setPrivateMode(
-                            requireActivity().contentResolver,
+                            contentResolver,
                             PrivateDNSUtils.DNS_MODE_PRIVATE
                         )
                         PrivateDNSUtils.setPrivateProvider(
-                            requireActivity().contentResolver,
+                            contentResolver,
                             server?.server
                         )
                         Toast.makeText(
