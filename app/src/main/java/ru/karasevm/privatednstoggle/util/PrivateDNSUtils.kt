@@ -85,20 +85,21 @@ object PrivateDNSUtils {
         scope: CoroutineScope,
         repository: DnsServerRepository,
         contentResolver: ContentResolver,
+        onlyProvider: Boolean = false,
         skipProvider: Boolean = false,
         onNext: ((String, String?) -> Unit)
     ) {
         val dnsMode = getPrivateMode(contentResolver)
         val dnsProvider = getPrivateProvider(contentResolver)
 
-        if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
+        if (dnsMode.equals(DNS_MODE_OFF, ignoreCase = true) && !onlyProvider) {
             if (sharedPrefs.autoMode == AUTO_MODE_OPTION_AUTO || sharedPrefs.autoMode == AUTO_MODE_OPTION_OFF_AUTO) {
                 onNext.invoke(DNS_MODE_AUTO, dnsProvider)
             } else {
                 onNext.invoke(DNS_MODE_PRIVATE, dnsProvider)
             }
 
-        } else if (dnsMode == null || dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true)) {
+        } else if (dnsMode == null || dnsMode.equals(DNS_MODE_AUTO, ignoreCase = true) && !onlyProvider) {
             onNext.invoke(DNS_MODE_PRIVATE, null)
         } else if (dnsMode.equals(DNS_MODE_PRIVATE, ignoreCase = true)) {
             scope.launch {

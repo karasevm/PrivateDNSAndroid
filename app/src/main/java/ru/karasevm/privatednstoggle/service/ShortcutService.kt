@@ -3,7 +3,6 @@ package ru.karasevm.privatednstoggle.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,11 +24,17 @@ class ShortcutService : Service() {
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
     companion object {
-        private const val ACTION_SWITCH_MODE = "myapp://switch_mode"
-        private const val ACTION_TOGGLE_MODE = "myapp://toggle_mode"
+        private const val ACTION_SWITCH_MODE = "privatednstoggle://switch_mode"
+        private const val ACTION_TOGGLE_MODE = "privatednstoggle://toggle_mode"
     }
 
     private fun setDnsModeAndShowToast(dnsMode: String) {
+        if(dnsMode == DNS_MODE_PRIVATE) {
+            val provider = PrivateDNSUtils.getPrivateProvider(contentResolver)
+            if (provider == null) {
+                PrivateDNSUtils.setPrivateProvider(contentResolver, "dns.google")
+            }
+        }
         PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
         val text = when (dnsMode) {
             DNS_MODE_OFF -> "DNS set to Off"
@@ -73,7 +78,7 @@ class ShortcutService : Service() {
                             })
                     }
                     else -> {
-                        PrivateDNSUtils.setPrivateMode(contentResolver, DNS_MODE_OFF)
+                        setDnsModeAndShowToast(DNS_MODE_OFF)
                     }
                 }
             }

@@ -9,7 +9,7 @@
             android:action="android.intent.action.VIEW"
             android:targetPackage="ru.karasevm.privatednstoggle"
             android:targetClass="ru.karasevm.privatednstoggle.ui.SettingsDialogActivity"
-            android:data="myapp://switch_mode"/>
+            android:data="privatednstoggle://switch_mode"/>
     </shortcut>
     <shortcut
         android:shortcutId="toggle_mode"
@@ -20,6 +20,6 @@
             android:action="android.intent.action.VIEW"
             android:targetPackage="ru.karasevm.privatednstoggle"
             android:targetClass="ru.karasevm.privatednstoggle.ui.SettingsDialogActivity"
-            android:data="myapp://toggle_mode"/>
+            android:data="privatednstoggle://toggle_mode"/>
     </shortcut>
 </shortcuts>
