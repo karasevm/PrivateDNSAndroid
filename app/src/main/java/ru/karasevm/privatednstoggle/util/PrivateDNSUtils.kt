@@ -15,7 +15,6 @@ import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.model.DnsServer
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoMode
 
-@Suppress("unused")
 object PrivateDNSUtils {
     const val DNS_MODE_OFF = "off"
     const val DNS_MODE_AUTO = "opportunistic"
