@@ -7,7 +7,9 @@ plugins {
 
 android {
     compileSdk 34
-
+    androidResources {
+        generateLocaleConfig true
+    }
     defaultConfig {
         applicationId "ru.karasevm.privatednstoggle"
         versionCode 16
