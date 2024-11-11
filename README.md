@@ -20,4 +20,5 @@ Some problems when granting permission through adb
 Enable "USB debugging (Security options)" in "Developer options". Note that this is a separate option from "USB debugging".
 
 ### ColorOS (OPPO & OnePlus)
-Disable "Permission monitoring" in "Developer options".
+Disable "Permission monitoring" in "Developer options"![1000018463](https://github.com/user-attachments/assets/5ef1eee1-f535-4bc4-9a97-4a3815049ab2)
+.
