@@ -1,2 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="tile_name">Хувийн DNS солих</string>
+    <string name="dns_off">Унтраах</string>
+    <string name="dns_unknown">Тодорхойгүй</string>
+    <string name="add_server">Сервер нэмэх</string>
+    <string name="menu_save">Хадгалах</string>
+    <string name="done">Болсон</string>
+    <string name="cancel">Болих</string>
+    <string name="delete_question">Устгах</string>
+    <string name="delete_message">Та серверийг устгахдаа итгэлтэй байна уу?</string>
+    <string name="delete">Устгах</string>
+    <string name="server_length_error">Серверийн хаяг хоосон байж болохгүй</string>
+    <string name="add_edittext_label_hint">DNS серверийн шошго (заавал биш)</string>
+    <string name="add_edittext_hint">DNS серверийн хаяг</string>
+    <string name="options">Сонголтууд</string>
+    <string name="ok">ОК</string>
+    <string name="auto_option_description">Хавтан дээр ямар сонголтыг оруулахаа сонгоно уу</string>
+    <string name="auto_option_only_off">Зөвхөн унтарсан</string>
+    <string name="auto_option_only_auto">Зөвхөн авто</string>
+    <string name="auto_option_off_and_auto">Унтарсан болон авто</string>
+    <string name="set_to_provider_toast">Хувийн DNS-г %1$s болгож тохируулсан</string>
+    <string name="require_unlock_setting">Серверийг өөрчлөхийн тулд төхөөрөмжийн түгжээг тайлах шаардлагатай</string>
+    <string name="a11y_drag_handle">Бариулыг чирэх</string>
+    <string name="menu_import">Импорт</string>
+    <string name="import_success">Импортолсон</string>
+    <string name="import_failure">Импорт хийж чадсангүй</string>
+    <string name="menu_import_from_file">Файлаас</string>
+    <string name="export_failure">Хадгалж чадсангүй</string>
+    <string name="export_success">Амжилттай хадгалсан</string>
+    <string name="edit_server">Сервер засах</string>
+    <string name="app_name">Хувийн DNS хурдан сэлгэх</string>
+    <string name="menu_privacy_policy">Нууцлалын бодлого</string>
+    <string name="permission_missing">Зөвшөөрөл олгоогүй. Үүнийг хэрхэн хийхийг харна уу</string>
+    <string name="dns_auto">Авто</string>
+    <string name="menu_add">Нэмэх</string>
+    <string name="select_server">Сервер сонгох</string>
+    <string name="auto_option_only_private">Зөвхөн хувийн DNS</string>
+    <string name="open_app">Апп нээх</string>
+    <string name="menu_export_to_clipboard">Түр санах ой руу</string>
+    <string name="set_to_off_toast">Хувийн DNS унтарсан</string>
+    <string name="set_to_auto_toast">Хувийн DNS-г автоматаар тохируулсан</string>
+    <string name="menu_export">Экспорт</string>
+    <string name="copy_success">Хуулагдсан</string>
+    <string name="menu_export_share">Хуваалцах</string>
+    <string name="import_failure_json">Импорт хийж чадсангүй, алдаатай JSON</string>
+    <string name="menu_import_from_clipboard">Түр санах ойноос</string>
+    <string name="menu_export_to_file">Файлруу</string>
+</resources>
