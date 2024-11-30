@@ -1,2 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="delete">Usuń</string>
+    <string name="menu_save">Zapisz</string>
+    <string name="menu_privacy_policy">Polityka prywatności</string>
+    <string name="select_server">Wybierz serwer</string>
+    <string name="cancel">Anuluj</string>
+    <string name="add_edittext_hint">Adres serwera DNS</string>
+    <string name="ok">OK</string>
+    <string name="open_app">Otwórz aplikację</string>
+    <string name="menu_import">Importuj</string>
+    <string name="menu_export">Eksportuj</string>
+    <string name="copy_success">Skopiowano</string>
+    <string name="menu_import_from_file">Z pliku</string>
+    <string name="menu_import_from_clipboard">Ze schowka</string>
+    <string name="menu_export_to_clipboard">Do schowka</string>
+    <string name="menu_export_share">Udostępnij</string>
+    <string name="menu_export_to_file">Do pliku</string>
+    <string name="edit_server">Edytuj serwer</string>
+    <string name="no_servers_added">Brak dodanych serwerów</string>
+    <string name="add_server_enabled">Włączone</string>
+    <string name="add_server">Dodaj serwer</string>
+    <string name="menu_add">Dodaj</string>
+    <string name="delete_question">Usuń</string>
+</resources>
