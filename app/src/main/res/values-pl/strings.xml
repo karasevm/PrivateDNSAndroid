@@ -22,4 +22,11 @@
     <string name="add_server">Dodaj serwer</string>
     <string name="menu_add">Dodaj</string>
     <string name="delete_question">Usuń</string>
+    <string name="dns_unknown">Nieznane</string>
+    <string name="done">Gotowe</string>
+    <string name="options">Opcje</string>
+    <string name="import_failure">Importowanie nie powiodło się</string>
+    <string name="dns_auto">Automatycznie</string>
+    <string name="dns_off">Wyłącz</string>
+    <string name="import_success">Zaimportowano</string>
 </resources>
