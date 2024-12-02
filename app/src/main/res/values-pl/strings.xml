@@ -29,4 +29,8 @@
     <string name="dns_auto">Automatycznie</string>
     <string name="dns_off">Wyłącz</string>
     <string name="import_success">Zaimportowano</string>
+    <string name="server_length_error">Adres serwera nie może być pusty</string>
+    <string name="import_failure_json">Import nie powiódł się, zniekształcony plik JSON</string>
+    <string name="export_success">Zapisano pomyślnie</string>
+    <string name="delete_message">Czy na pewno chcesz usunąć serwer?</string>
 </resources>
