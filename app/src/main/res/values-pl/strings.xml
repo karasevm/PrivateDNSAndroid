@@ -33,4 +33,6 @@
     <string name="import_failure_json">Import nie powiódł się, zniekształcony plik JSON</string>
     <string name="export_success">Zapisano pomyślnie</string>
     <string name="delete_message">Czy na pewno chcesz usunąć serwer?</string>
+    <string name="app_name">Private DNS Quick Toggle</string>
+    <string name="tile_name">Przełącznik prywatnego DNS</string>
 </resources>
