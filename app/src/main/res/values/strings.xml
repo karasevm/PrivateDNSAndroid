@@ -48,4 +48,6 @@
     <string name="no_servers_added">No Servers Added</string>
     <string name="empty_hint">Tap on the button below to add one</string>
     <string name="add_server_enabled">Enabled</string>
+    <string name="shortcut_switch_mode">Switch Mode</string>
+    <string name="shortcut_toggle_on_off">Toggle On/Off</string>
 </resources>
