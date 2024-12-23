@@ -35,4 +35,18 @@
     <string name="delete_message">Czy na pewno chcesz usunąć serwer?</string>
     <string name="app_name">Private DNS Quick Toggle</string>
     <string name="tile_name">Przełącznik prywatnego DNS</string>
+    <string name="permission_missing">Nieprzydzielono uprawnienia, sprawdź w aplikacji, w jaki sposób można to zrobić</string>
+    <string name="add_edittext_label_hint">Opis serwera DNS (opcjonalnie)</string>
+    <string name="auto_option_description">Wybierz opcje, które będą dostępne w kafelku</string>
+    <string name="auto_option_only_off">Tylko wyłączenie</string>
+    <string name="auto_option_only_auto">Tylko automatycznie</string>
+    <string name="auto_option_off_and_auto">Wyłączenie i automatycznie</string>
+    <string name="auto_option_only_private">Tylko prywatny DNS</string>
+    <string name="set_to_auto_toast">Prywatny DNS zmieniony na automatyczny</string>
+    <string name="set_to_provider_toast">Prywatny DNS zmieniony na %1$s</string>
+    <string name="require_unlock_setting">Wymagaj odblokowania urządzenia do zmiany serwera</string>
+    <string name="set_to_off_toast">Wyłączono Prywatny DNS</string>
+    <string name="a11y_drag_handle">Przeciągnij</string>
+    <string name="export_failure">Zapisywanie nie powiodło się</string>
+    <string name="empty_hint">Kliknij na poniższy przycisk, aby dodać nowy</string>
 </resources>
