@@ -1,2 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="import_success">Importado</string>
+    <string name="permission_missing">Permissão não concedida, verifique o app para saber como prosseguir</string>
+    <string name="app_name">Alteração rápida de DNS privado</string>
+    <string name="cancel">Cancelar</string>
+    <string name="add_server">Adicionar servidor</string>
+    <string name="add_edittext_hint">Endereço do servidor DNS</string>
+    <string name="auto_option_description">Escolha opções disponível em atalho</string>
+    <string name="tile_name">Alteração de DNS privado</string>
+    <string name="dns_off">Desativado</string>
+    <string name="dns_auto">Automático</string>
+    <string name="dns_unknown">Indeterminado</string>
+    <string name="menu_add">Adicionar</string>
+    <string name="menu_save">Salvar</string>
+    <string name="menu_privacy_policy">Política de privacidade</string>
+    <string name="done">Concluído</string>
+    <string name="delete_question">Apagar</string>
+    <string name="delete_message">Tem certeza de que quer apagar o servidor?</string>
+    <string name="delete">Apagar</string>
+    <string name="server_length_error">O endereço do servidor não pode estar em branco</string>
+    <string name="add_edittext_label_hint">Identificação do servidor DNS (opcional)</string>
+    <string name="options">Opções</string>
+    <string name="ok">Ok</string>
+    <string name="auto_option_only_off">Somente desativado</string>
+    <string name="auto_option_off_and_auto">Desativado e automático</string>
+    <string name="auto_option_only_private">Somente DNS privado</string>
+    <string name="open_app">Abrir app</string>
+    <string name="set_to_off_toast">DNS privado desativado</string>
+    <string name="set_to_auto_toast">DNS privado definido para automático</string>
+    <string name="set_to_provider_toast">DNS privado definido para %1$s</string>
+    <string name="a11y_drag_handle">Arrastre</string>
+    <string name="menu_import">Importar</string>
+    <string name="menu_export">Exportar</string>
+    <string name="import_failure_json">Falha na importação, JSON malformado</string>
+    <string name="copy_success">Copiado</string>
+    <string name="menu_import_from_clipboard">Da memória</string>
+    <string name="menu_export_share">Compartilhar</string>
+    <string name="menu_export_to_file">Para arquivo</string>
+    <string name="export_success">Salvo com sucesso</string>
+    <string name="edit_server">Editar servidor</string>
+    <string name="no_servers_added">Nenhum servidor adicionado</string>
+    <string name="empty_hint">Toque no botão abaixo para adicionar</string>
+    <string name="add_server_enabled">Ativado</string>
+    <string name="select_server">Escolha servidor</string>
+    <string name="menu_export_to_clipboard">Para memória</string>
+    <string name="menu_import_from_file">De arquivo</string>
+    <string name="import_failure">Falha ao importar</string>
+    <string name="export_failure">Falha ao salvar</string>
+    <string name="require_unlock_setting">Precisa desbloquear dispositivo para alterar servidor</string>
+    <string name="auto_option_only_auto">Somente automático</string>
+</resources>
