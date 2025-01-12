@@ -1,2 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="add_server">Thêm máy chủ</string>
+    <string name="auto_option_only_auto">Chỉ tự động</string>
+    <string name="permission_missing">Chưa được cấp quyền, hãy kiểm tra ứng dụng để biết cách thực hiện</string>
+    <string name="dns_off">Tắt</string>
+    <string name="dns_auto">Tự động</string>
+    <string name="menu_add">Thêm</string>
+    <string name="menu_privacy_policy">Chính sách bảo mật</string>
+    <string name="select_server">Chọn máy chủ</string>
+    <string name="done">Hoàn thành</string>
+    <string name="cancel">Hủy</string>
+    <string name="delete_message">Bạn có chắc chắn muốn xóa máy chủ không?</string>
+    <string name="delete">Xoá</string>
+    <string name="add_edittext_hint">Địa chỉ máy chủ DNS</string>
+    <string name="options">Tùy chọn</string>
+    <string name="ok">OK</string>
+    <string name="auto_option_description">Chọn các tùy chọn để đưa vào ô</string>
+    <string name="auto_option_only_off">Chỉ tắt</string>
+    <string name="auto_option_off_and_auto">Tắt và tự động</string>
+    <string name="open_app">Mở ứng dụng</string>
+    <string name="set_to_auto_toast">DNS cá nhân được thiết lập tự động</string>
+    <string name="require_unlock_setting">Yêu cầu mở khóa thiết bị để thay đổi máy chủ</string>
+    <string name="a11y_drag_handle">Tay cầm kéo</string>
+    <string name="menu_export">Xuất</string>
+    <string name="import_success">Đã nhập</string>
+    <string name="import_failure">Nhập thất bại</string>
+    <string name="import_failure_json">Nhập thất bại, JSON bị lỗi</string>
+    <string name="copy_success">Đã sao chép</string>
+    <string name="menu_import_from_file">Từ tập tin</string>
+    <string name="menu_export_share">Chia sẻ</string>
+    <string name="menu_export_to_file">Thành tập tin</string>
+    <string name="export_failure">Lưu không thành công</string>
+    <string name="edit_server">Chỉnh sửa máy chủ</string>
+    <string name="no_servers_added">Chưa có máy chủ nào</string>
+    <string name="empty_hint">Nhấn vào nút bên dưới để thêm</string>
+    <string name="add_server_enabled">Đã bật</string>
+    <string name="tile_name">Chuyển đổi DNS cá nhân</string>
+    <string name="delete_question">Xoá</string>
+    <string name="app_name">Chuyển đổi nhanh DNS cá nhân</string>
+    <string name="dns_unknown">Không rõ</string>
+    <string name="add_edittext_label_hint">Nhãn máy chủ DNS (Không bắt buộc)</string>
+    <string name="menu_save">Lưu</string>
+    <string name="server_length_error">Địa chỉ máy chủ không được để trống</string>
+    <string name="auto_option_only_private">Chỉ DNS cá nhân</string>
+    <string name="set_to_off_toast">Đã tắt DNS cá nhân</string>
+    <string name="set_to_provider_toast">DNS cá nhân được đặt thành %1$s</string>
+    <string name="menu_import">Nhập</string>
+    <string name="menu_import_from_clipboard">Từ bảng nhớ tạm</string>
+    <string name="menu_export_to_clipboard">Vào bảng nhớ tạm</string>
+    <string name="export_success">Đã lưu thành công</string>
+</resources>
