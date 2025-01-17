@@ -6,13 +6,11 @@ import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.IPackageManager
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.permission.IPermissionManager
 import android.util.Log
 import android.view.Menu
 import android.view.View
@@ -30,11 +28,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.shizuku.Shizuku
-import rikka.shizuku.ShizukuBinderWrapper
 import rikka.shizuku.ShizukuProvider
-import rikka.shizuku.SystemServiceHelper
 import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.R
 import ru.karasevm.privatednstoggle.data.DnsServerViewModel
@@ -44,6 +39,7 @@ import ru.karasevm.privatednstoggle.model.DnsServer
 import ru.karasevm.privatednstoggle.util.BackupUtils
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.dns_servers
+import ru.karasevm.privatednstoggle.util.ShizukuUtil.grantPermissionWithShizuku
 
 
 class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogListener,
@@ -51,7 +47,6 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var binding: ActivityMainBinding
-    private var items = mutableListOf<String>()
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var adapter: ServerListRecyclerAdapter
     private lateinit var clipboard: ClipboardManager
@@ -150,18 +145,20 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
      *  Migrate the SharedPreferences server list to Room
      */
     private fun migrateServerList() {
-        if (sharedPrefs.dns_servers.isNotEmpty() && sharedPrefs.dns_servers[0] != "") {
-            Log.i(
-                "migrate",
-                "existing sharedPrefs list: ${sharedPrefs.dns_servers} ${sharedPrefs.dns_servers.size}"
-            )
-            sharedPrefs.dns_servers.forEach { server ->
-                val parts = server.split(" : ").toMutableList()
-                if (parts.size != 2) parts.add(0, "")
-                Log.i("migrate", "migrating: $server -> $parts")
-                dnsServerViewModel.insert(DnsServer(0, parts[1], parts[0]))
+        dnsServerViewModel.viewModelScope.launch {
+            if (sharedPrefs.dns_servers.isNotEmpty() && sharedPrefs.dns_servers[0] != "") {
+                Log.i(
+                    "migrate",
+                    "existing sharedPrefs list: ${sharedPrefs.dns_servers} ${sharedPrefs.dns_servers.size}"
+                )
+                sharedPrefs.dns_servers.forEach { server ->
+                    val parts = server.split(" : ").toMutableList()
+                    if (parts.size != 2) parts.add(0, "")
+                    Log.i("migrate", "migrating: $server -> $parts")
+                    dnsServerViewModel.insert(DnsServer(0, parts[1], parts[0]))
+                }
+                sharedPrefs.dns_servers = emptyList<String>().toMutableList()
             }
-            sharedPrefs.dns_servers = emptyList<String>().toMutableList()
         }
     }
 
@@ -181,11 +178,6 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
 
         migrateServerList()
-
-        items = sharedPrefs.dns_servers
-        if (items[0] == "") {
-            items.removeAt(0)
-        }
 
         adapter = ServerListRecyclerAdapter(true)
         binding.recyclerView.adapter = adapter
@@ -363,7 +355,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                         Shizuku.requestPermission(1)
                     }
                 } else {
-                    grantPermissionWithShizuku()
+                    grantPermission()
                 }
             } else {
                 if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
@@ -371,6 +363,9 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                         Intent.ACTION_VIEW,
                         Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
                     )
+                    Toast.makeText(
+                        this, R.string.shizuku_failure_toast, Toast.LENGTH_SHORT
+                    ).show()
                     startActivity(browserIntent)
                     finish()
                 }
@@ -454,58 +449,27 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
         dnsServerViewModel.update(id, server, label, null, enabled)
     }
 
-    /**
-     * Attempts to grant WRITE_SECURE_SETTINGS permission with Shizuku
-     */
-    private fun grantPermissionWithShizuku() {
-        val packageName = applicationContext.packageName
-        runCatching {
-            if (Build.VERSION.SDK_INT >= 31) {
-                HiddenApiBypass.addHiddenApiExemptions("Landroid/permission")
-                val binder =
-                    ShizukuBinderWrapper(SystemServiceHelper.getSystemService("permissionmgr"))
-                val pm = IPermissionManager.Stub.asInterface(binder)
-                runCatching {
-                    pm.grantRuntimePermission(
-                        packageName, Manifest.permission.WRITE_SECURE_SETTINGS, 0
-                    )
-                }.onFailure { _ ->
-                    if (Build.VERSION.SDK_INT >= 34) {
-                        pm.grantRuntimePermission(
-                            packageName,
-                            Manifest.permission.WRITE_SECURE_SETTINGS,
-                            applicationContext.deviceId,
-                            0
-                        )
-                    }
-                }
-            } else {
-                val binder = ShizukuBinderWrapper(SystemServiceHelper.getSystemService("package"))
-                val pm = IPackageManager.Stub.asInterface(binder)
-                pm.grantRuntimePermission(
-                    packageName, Manifest.permission.WRITE_SECURE_SETTINGS, 0
-                )
-            }
-        }.onFailure { e ->
-            Log.e("SHIZUKU", "onRequestPermissionResult: ", e)
-        }.also {
-            if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
-                val browserIntent = Intent(
-                    Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
-                )
-                startActivity(browserIntent)
-                finish()
-            }
+    private fun grantPermission() {
+        if (grantPermissionWithShizuku(this)) {
+            Toast.makeText(
+                this, R.string.shizuku_success_toast, Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                this, R.string.shizuku_failure_toast, Toast.LENGTH_SHORT
+            ).show()
+            val browserIntent = Intent(
+                Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+            )
+            startActivity(browserIntent)
+            finish()
         }
-
     }
 
     override fun onRequestPermissionResult(requestCode: Int, grantResult: Int) {
         val isGranted = grantResult == PackageManager.PERMISSION_GRANTED
 
-        if (isGranted) {
-            grantPermissionWithShizuku()
-        } else if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+        if (!isGranted && checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             val browserIntent = Intent(
                 Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
             )

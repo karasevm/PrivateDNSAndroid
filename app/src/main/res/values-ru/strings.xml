@@ -48,4 +48,6 @@
     <string name="no_servers_added">Нет доступных серверов</string>
     <string name="empty_hint">Нажмите на кнопку ниже, чтобы добавить сервер</string>
     <string name="add_server_enabled">Включён</string>
+    <string name="shizuku_success_toast">Разрешение получено, можно отозвать авторизацию Shizuku</string>
+    <string name="shizuku_failure_toast">Не удалось получить разрешение, предоставьте его вручную</string>
 </resources>

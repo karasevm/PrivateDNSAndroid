@@ -48,4 +48,6 @@
     <string name="no_servers_added">No Servers Added</string>
     <string name="empty_hint">Tap on the button below to add one</string>
     <string name="add_server_enabled">Enabled</string>
+    <string name="shizuku_success_toast">Permission granted, you can revoke the Shizuku permission now</string>
+    <string name="shizuku_failure_toast">Failed to acquire permission, please grant it manually</string>
 </resources>
