@@ -6,4 +6,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Private DNS Quick Toggle"
-include ':app'
+include("app")
