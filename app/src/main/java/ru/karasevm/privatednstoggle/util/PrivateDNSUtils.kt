@@ -5,9 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageManager
 import android.provider.Settings
-import android.widget.Toast
 import androidx.core.content.ContextCompat.checkSelfPermission
-import ru.karasevm.privatednstoggle.R
 
 @Suppress("unused")
 object PrivateDNSUtils {
@@ -45,15 +43,10 @@ object PrivateDNSUtils {
     }
 
     fun checkForPermission(context: Context): Boolean {
-        if (checkSelfPermission(
-                context,
-                Manifest.permission.WRITE_SECURE_SETTINGS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        Toast.makeText(context, R.string.permission_missing, Toast.LENGTH_SHORT).show()
-        return false
+        return checkSelfPermission(
+            context,
+            Manifest.permission.WRITE_SECURE_SETTINGS
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
 }

@@ -17,6 +17,7 @@ import ru.karasevm.privatednstoggle.data.DnsServerViewModelFactory
 import ru.karasevm.privatednstoggle.databinding.SheetDnsSelectorBinding
 import ru.karasevm.privatednstoggle.model.DnsServer
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
+import ru.karasevm.privatednstoggle.util.PrivateDNSUtils.checkForPermission
 
 class DNSServerDialogFragment : DialogFragment() {
 
@@ -68,7 +69,12 @@ class DNSServerDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-
+        if (!checkForPermission(requireContext())) {
+            Toast.makeText(
+                context, R.string.permission_missing, Toast.LENGTH_SHORT
+            ).show()
+            dialog!!.dismiss()
+        }
         adapter.onItemClick = { id ->
             when (id) {
                 OFF_ID -> {

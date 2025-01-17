@@ -14,6 +14,7 @@ import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 class OptionsDialogFragment : DialogFragment() {
     private var _binding: DialogOptionsBinding? = null
     private val binding get() = _binding!!
+    private val sharedPreferences by lazy { PreferenceHelper.defaultPreference(requireContext()) }
 
     override fun onCreateDialog(
         savedInstanceState: Bundle?
@@ -34,8 +35,7 @@ class OptionsDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        val sharedPrefs = PreferenceHelper.defaultPreference(requireContext())
-        val autoModeOption = sharedPrefs.autoMode
+        val autoModeOption = sharedPreferences.autoMode
         when (autoModeOption) {
             PrivateDNSUtils.AUTO_MODE_OPTION_OFF -> binding.autoOptionRadioGroup.check(R.id.autoOptionOff)
             PrivateDNSUtils.AUTO_MODE_OPTION_AUTO -> binding.autoOptionRadioGroup.check(R.id.autoOptionAuto)
@@ -44,20 +44,20 @@ class OptionsDialogFragment : DialogFragment() {
         }
         binding.autoOptionRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.autoOptionOff -> sharedPrefs.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_OFF
-                R.id.autoOptionAuto -> sharedPrefs.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_AUTO
-                R.id.autoOptionOffAuto -> sharedPrefs.autoMode =
+                R.id.autoOptionOff -> sharedPreferences.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_OFF
+                R.id.autoOptionAuto -> sharedPreferences.autoMode = PrivateDNSUtils.AUTO_MODE_OPTION_AUTO
+                R.id.autoOptionOffAuto -> sharedPreferences.autoMode =
                     PrivateDNSUtils.AUTO_MODE_OPTION_OFF_AUTO
 
-                R.id.autoOptionPrivate -> sharedPrefs.autoMode =
+                R.id.autoOptionPrivate -> sharedPreferences.autoMode =
                     PrivateDNSUtils.AUTO_MODE_OPTION_PRIVATE
             }
         }
 
-        val requireUnlock = sharedPrefs.requireUnlock
+        val requireUnlock = sharedPreferences.requireUnlock
         binding.requireUnlockSwitch.isChecked = requireUnlock
         binding.requireUnlockSwitch.setOnCheckedChangeListener { _, isChecked ->
-            sharedPrefs.requireUnlock = isChecked
+            sharedPreferences.requireUnlock = isChecked
         }
     }
 }

@@ -74,6 +74,6 @@ object BackupUtils {
                 }
         }
         sharedPreferences.autoMode = legacyBackup.autoMode?: 0
-        sharedPreferences.requireUnlock = legacyBackup.requireUnlock?: false
+        sharedPreferences.requireUnlock = legacyBackup.requireUnlock == true
     }
 }
