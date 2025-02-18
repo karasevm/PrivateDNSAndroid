@@ -49,4 +49,6 @@
     <string name="a11y_drag_handle">Przeciągnij</string>
     <string name="export_failure">Zapisywanie nie powiodło się</string>
     <string name="empty_hint">Kliknij na poniższy przycisk, aby dodać nowy</string>
+    <string name="shizuku_success_toast">Udzielono zezwolenia, możesz teraz cofnąć zezwolenie w Shizuku</string>
+    <string name="shizuku_failure_toast">Uzyskanie uprawnień nie powiodło się, udziel ich ręcznie</string>
 </resources>
