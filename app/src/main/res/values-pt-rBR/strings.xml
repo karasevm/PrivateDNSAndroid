@@ -2,7 +2,7 @@
 <resources>
     <string name="import_success">Importado</string>
     <string name="permission_missing">Permissão não concedida, verifique o app para saber como prosseguir</string>
-    <string name="app_name">Alteração rápida de DNS privado</string>
+    <string name="app_name">Alteração de DNS privado</string>
     <string name="cancel">Cancelar</string>
     <string name="add_server">Adicionar servidor</string>
     <string name="add_edittext_hint">Endereço do servidor DNS</string>
@@ -49,4 +49,6 @@
     <string name="export_failure">Falha ao salvar</string>
     <string name="require_unlock_setting">Precisa desbloquear dispositivo para alterar servidor</string>
     <string name="auto_option_only_auto">Somente automático</string>
+    <string name="shizuku_failure_toast">Falha ao obter a permissão. Tente conceder manualmente</string>
+    <string name="shizuku_success_toast">Permissão concedida, você pode revogar a permissão do Shizuku agora</string>
 </resources>
