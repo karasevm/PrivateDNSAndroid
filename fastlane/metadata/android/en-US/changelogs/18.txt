@@ -1,0 +1,12 @@
+- Add Shizuku support for newer Android versions
+- Fix some crashes
+- Improve Shizuku process feedback
+- Fix Shizuku when not running as the primary user
+- Hungarian translation by @Pacuka in https://github.com/karasevm/PrivateDNSAndroid/pull/43
+- Add Polish translation (Michal L (@chuckmichael), Eryk Michalak (gnu-ewm))
+- Add Mongolian translation (Purevbaatar Tuvshinjargal (@puujee0238))
+- Add Portuguese (Brazil) translation (ajan, Víctor Assunção (@JoaoVictorAS))
+- Add Vietnamese translation (tuấn nguyễn (@Tuan1-2-3))
+- Add French translation (papaindiatango)
+- Add Tamil translation (தமிழ்நேரம் (@TamilNeram))
+- Add Turkish translation (Mustafa A. (mistiik99))
