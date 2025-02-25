@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -11,6 +13,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Transparent">
+        <service
+            android:name=".service.ShortcutService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
@@ -18,23 +24,24 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
         <activity
             android:name=".ui.MainActivity"
-            android:theme="@style/Theme.MyApplication"
-            android:taskAffinity="${applicationId}.main"
+            android:exported="true"
             android:launchMode="singleInstance"
-            android:exported="true">
+            android:taskAffinity="${applicationId}.main"
+            android:theme="@style/Theme.MyApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.SettingsDialogActivity"
-            android:theme="@style/Theme.Transparent"
             android:excludeFromRecents="true"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
