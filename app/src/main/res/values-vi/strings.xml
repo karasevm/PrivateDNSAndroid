@@ -49,4 +49,6 @@
     <string name="menu_import_from_clipboard">Từ bảng nhớ tạm</string>
     <string name="menu_export_to_clipboard">Vào bảng nhớ tạm</string>
     <string name="export_success">Đã lưu thành công</string>
+    <string name="shizuku_success_toast">Đã được cấp quyền, bạn có thể thu hồi quyền Shizuku ngay bây giờ</string>
+    <string name="shizuku_failure_toast">Chưa được cấp quyền, vui lòng cấp quyền thủ công</string>
 </resources>
