@@ -2,7 +2,7 @@
 <resources>
     <string name="add_server">新增伺服器</string>
     <string name="menu_add">新增</string>
-    <string name="tile_name">私人DNS切換</string>
+    <string name="tile_name">私人 DNS 切換</string>
     <string name="permission_missing">未授予權限，請檢查應用程式以了解如何操作</string>
     <string name="dns_off">關閉</string>
     <string name="dns_auto">自動</string>
@@ -42,11 +42,12 @@
     <string name="add_server_enabled">已啟用</string>
     <string name="shizuku_success_toast">已授予權限，您現在可以撤銷 Shizuku 權限</string>
     <string name="shizuku_failure_toast">取得權限失敗，請手動授予</string>
-    <string name="menu_save">保存</string>
+    <string name="menu_save">儲存</string>
     <string name="delete_message">確定要刪除伺服器嗎？</string>
     <string name="auto_option_description">選擇要包含在磁貼中的選項</string>
     <string name="copy_success">已複製</string>
     <string name="menu_import_from_file">從檔案</string>
     <string name="menu_export_share">分享</string>
     <string name="no_servers_added">未添加伺服器</string>
+    <string name="app_name">Private DNS Quick Toggle</string>
 </resources>
