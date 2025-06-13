@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Privát DNS Gyorskapcsoló</string>
     <string name="tile_name">Privát DNS Kapcsoló</string>
@@ -48,4 +49,6 @@
     <string name="no_servers_added">Nincsenek szerverek hozzáadva</string>
     <string name="empty_hint">Koppints az alábbi gombra, hogy hozzáadj egyet</string>
     <string name="add_server_enabled">Engedélyezve</string>
+    <string name="shizuku_success_toast">Engedélyt megadva, most már visszavonhatja a Shizuku engedélyt</string>
+    <string name="shizuku_failure_toast">Nem sikerült engedélyt szerezni, kérjük, adja meg manuálisan</string>
 </resources>
