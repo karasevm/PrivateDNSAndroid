@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ShareCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuProvider
@@ -217,7 +216,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 R.id.privacy_policy -> {
                     val browserIntent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/privacy_policy")
+                        "https://karasevm.github.io/PrivateDNSAndroid/privacy_policy".toUri()
                     )
                     startActivity(browserIntent)
                     true
@@ -296,7 +295,8 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 data?.data?.also { uri ->
-                    val jsonData = Json.encodeToString(BackupUtils.export(dnsServerViewModel, sharedPrefs))
+                    val jsonData =
+                        Json.encodeToString(BackupUtils.export(dnsServerViewModel, sharedPrefs))
                     val contentResolver = applicationContext.contentResolver
                     runCatching {
                         contentResolver.openOutputStream(uri)?.use { outputStream ->
@@ -361,7 +361,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
                     val browserIntent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+                        "https://karasevm.github.io/PrivateDNSAndroid/".toUri()
                     )
                     Toast.makeText(
                         this, R.string.shizuku_failure_toast, Toast.LENGTH_SHORT
@@ -459,7 +459,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 this, R.string.shizuku_failure_toast, Toast.LENGTH_SHORT
             ).show()
             val browserIntent = Intent(
-                Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+                Intent.ACTION_VIEW, "https://karasevm.github.io/PrivateDNSAndroid/".toUri()
             )
             startActivity(browserIntent)
             finish()
@@ -471,7 +471,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
 
         if (!isGranted && checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
             val browserIntent = Intent(
-                Intent.ACTION_VIEW, Uri.parse("https://karasevm.github.io/PrivateDNSAndroid/")
+                Intent.ACTION_VIEW, "https://karasevm.github.io/PrivateDNSAndroid/".toUri()
             )
             startActivity(browserIntent)
             finish()

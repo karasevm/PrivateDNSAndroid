@@ -2,6 +2,7 @@ package ru.karasevm.privatednstoggle.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 object PreferenceHelper {
 
@@ -13,9 +14,9 @@ object PreferenceHelper {
         context.getSharedPreferences("app_prefs", 0)
 
     private inline fun SharedPreferences.editMe(operation: (SharedPreferences.Editor) -> Unit) {
-        val editMe = edit()
-        operation(editMe)
-        editMe.apply()
+        edit {
+            operation(this)
+        }
     }
 
     private fun SharedPreferences.Editor.put(pair: Pair<String, Any>) {

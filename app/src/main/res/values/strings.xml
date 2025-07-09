@@ -50,5 +50,6 @@
     <string name="add_server_enabled">Enabled</string>
     <string name="shizuku_success_toast">Permission granted, you can revoke the Shizuku permission now</string>
     <string name="shizuku_failure_toast">Failed to acquire permission, please grant it manually</string>
-    <string name="shortcut_switch_mode">Switch Mode</string>
+    <string name="shortcut_do_cycle">Next server/mode</string>
+    <string name="shortcut_switch_mode">Switch mode</string>
 </resources>

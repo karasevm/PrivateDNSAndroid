@@ -16,7 +16,7 @@
         <service
             android:name=".service.ShortcutService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="false" />
 
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
@@ -33,7 +33,6 @@
             android:theme="@style/Theme.MyApplication">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data
@@ -48,6 +47,11 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ShortcutHandlerActivity"
+            android:theme="@style/Theme.Transparent"
+            android:exported="true">
         </activity>
 
         <service

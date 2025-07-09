@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
+        android:shortcutId="do_cycle"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_next_24dp"
+        android:shortcutShortLabel="@string/shortcut_do_cycle">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="ru.karasevm.privatednstoggle"
+            android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
+            android:data="privatednstoggle://do_cycle"/>
+    </shortcut>
+    <shortcut
         android:shortcutId="switch_mode"
         android:enabled="true"
-        android:icon="@drawable/ic_outline_next_24dp"
+        android:icon="@drawable/ic_shortcut_mode_24dp"
         android:shortcutShortLabel="@string/shortcut_switch_mode">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="ru.karasevm.privatednstoggle"
-            android:targetClass="ru.karasevm.privatednstoggle.ui.SettingsDialogActivity"
+            android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
             android:data="privatednstoggle://switch_mode"/>
     </shortcut>
 </shortcuts>
