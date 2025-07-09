@@ -33,9 +33,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
         }
         debug {
             applicationIdSuffix = ".dev"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_debug"
         }
     }
     compileOptions {
