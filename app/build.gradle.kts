@@ -16,8 +16,8 @@ android {
     }
     defaultConfig {
         applicationId = "ru.karasevm.privatednstoggle"
-        versionCode = 18
-        versionName = "1.10.0"
+        versionCode = 19
+        versionName = "1.11.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         targetSdk = 36
