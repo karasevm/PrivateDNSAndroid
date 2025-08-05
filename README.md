@@ -10,8 +10,18 @@ a single tap.
 ![Private DNS app screenshot](readme.jpg)
 
 ## Installation
+
+### IzzyOnDroid (Recommended, will enable auto-updates on Android 12+)
+
+1. Install an F-droid client such as [Droidify](https://droidify.eu.org/download) or the [official F-Droid client](https://f-droid.org/)
+2. Verify that [IzzyOnDroid repo](https://apt.izzysoft.de/fdroid/repo?fingerprint=3BF0D6ABFEAE2F401707B6D966BE743BF0EEE49C2561B9BA39073711F628937A) is added and enabled
+3. Search for the full app name "Private DNS Quick Toggle" and install it
+
+### GitHub Releases
 Get the latest apk on the [releases page](https://github.com/karasevm/PrivateDNSAndroid/releases/latest) 
-or from [IzzyOnDroid repo](https://apt.izzysoft.de/fdroid/index/apk/ru.karasevm.privatednstoggle).
+
+## Activation
+To change the system DNS options the app requires `android.permission.WRITE_SECURE_SETTINGS` permission. There are multiple ways to provide it.
 
 ### Automatic (Shizuku)
 1. Install and start [Shizuku](https://shizuku.rikka.app/).
