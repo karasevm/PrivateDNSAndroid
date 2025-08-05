@@ -1,0 +1,9 @@
+- Two new shortcuts - Next Server and Switch Mode (thanks @InfiniteCoder06 for groundwork)
+- Updated libraries and targetSdk for Android 16.
+- Added a list of used open-source libraries.
+- Chinese (Traditional Han script) translation by: 張恩愷 (kevin0910305), Jia-Bin (@OrStudio)
+- Hungarian translation by: Pacuka (@Pacuka)
+- Italian translation by: Champ0999 (@Champ0999)
+- Serbian translation by: zivojin kuzmanovic (kuzmanovic.zivojin2)
+- Ukrainian translation by: Dmitriy (@dmytro-kerest)
+- Vietnamese translation by: tuấn nguyễn (nguyentuan9834nblkh)
