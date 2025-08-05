@@ -38,18 +38,6 @@ class ShortcutService : Service() {
             PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         }
         PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
-//        val text = when (dnsMode) {
-//            // TODO: Localize
-//            PrivateDNSUtils.DNS_MODE_OFF -> "DNS set to Off"
-//            PrivateDNSUtils.DNS_MODE_AUTO -> "DNS set to Auto"
-//            PrivateDNSUtils.DNS_MODE_PRIVATE -> "DNS set to Private Provider"
-//            else -> "Unknown"
-//        }
-//        scope.launch {
-//            launch(Dispatchers.Main) {
-//                Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
-//            }
-//        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

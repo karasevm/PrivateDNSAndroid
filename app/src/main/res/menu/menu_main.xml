@@ -37,4 +37,7 @@
     <item android:id="@+id/privacy_policy"
         android:title="@string/menu_privacy_policy"
         app:showAsAction="never" />
+    <item android:id="@+id/open_source_licenses"
+        android:title="@string/open_source_licenses"
+        app:showAsAction="never" />
 </menu>

@@ -5,6 +5,8 @@ plugins {
     id("kotlin-android")
     id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.mikepenz.aboutlibraries.plugin")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -24,6 +26,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
     buildTypes {
         release {
@@ -85,12 +88,28 @@ dependencies {
     androidTestImplementation("androidx.room:room-testing:$roomVersion")
 
     // Lifecycle components
-    val lifecycleVersion = "2.9.1"
+    val lifecycleVersion = "2.9.2"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
 
+    // Compose
+    val composeBom = platform("androidx.compose:compose-bom:2025.05.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation("androidx.activity:activity-compose:1.10.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation("androidx.compose.runtime:runtime-livedata")
+
+
+    val latestAboutLibsRelease = "12.2.4"
+    implementation("com.mikepenz:aboutlibraries-core:$latestAboutLibsRelease")
+    implementation("com.mikepenz:aboutlibraries-compose-m3:${latestAboutLibsRelease}")
+
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
 }

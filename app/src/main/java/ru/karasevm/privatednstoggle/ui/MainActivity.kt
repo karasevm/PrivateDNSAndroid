@@ -285,6 +285,12 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                     true
                 }
 
+                R.id.open_source_licenses -> {
+                    // start license activity
+                    val intent = Intent(this, AboutLibsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> true
             }
         }

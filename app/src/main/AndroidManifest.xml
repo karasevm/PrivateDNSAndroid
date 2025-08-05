@@ -50,8 +50,23 @@
         </activity>
         <activity
             android:name=".ShortcutHandlerActivity"
-            android:theme="@style/Theme.Transparent"
-            android:exported="true">
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:theme="@style/Theme.Transparent">
+            <intent-filter>
+                <action android:name="ru.karasevm.privatednstoggle.action.SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.AboutLibsActivity"
+            android:excludeFromRecents="true"
+            android:exported="false">
         </activity>
 
         <service

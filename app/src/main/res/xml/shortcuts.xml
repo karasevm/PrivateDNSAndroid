@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_shortcut_next_24dp"
         android:shortcutShortLabel="@string/shortcut_do_cycle">
         <intent
-            android:action="android.intent.action.VIEW"
+            android:action="ru.karasevm.privatednstoggle.action.SHORTCUT"
             android:targetPackage="ru.karasevm.privatednstoggle"
             android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
             android:data="privatednstoggle://do_cycle"/>
@@ -17,7 +17,7 @@
         android:icon="@drawable/ic_shortcut_mode_24dp"
         android:shortcutShortLabel="@string/shortcut_switch_mode">
         <intent
-            android:action="android.intent.action.VIEW"
+            android:action="ru.karasevm.privatednstoggle.action.SHORTCUT"
             android:targetPackage="ru.karasevm.privatednstoggle"
             android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
             android:data="privatednstoggle://switch_mode"/>

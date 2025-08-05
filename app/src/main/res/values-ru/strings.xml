@@ -50,4 +50,7 @@
     <string name="add_server_enabled">Включён</string>
     <string name="shizuku_success_toast">Разрешение получено, можно отозвать авторизацию Shizuku</string>
     <string name="shizuku_failure_toast">Не удалось получить разрешение, предоставьте его вручную</string>
+    <string name="shortcut_do_cycle">Следующий сервер/режим</string>
+    <string name="shortcut_switch_mode">Переключить режим</string>
+    <string name="open_source_licenses">Лицензии открытого ПО</string>
 </resources>
