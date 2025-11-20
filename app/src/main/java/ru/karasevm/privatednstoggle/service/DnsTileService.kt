@@ -19,6 +19,10 @@ import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.R
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertEnabled
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertMinutes
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertProvider
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.requireUnlock
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils.DNS_MODE_AUTO
@@ -249,6 +253,28 @@ class DnsTileService : TileService() {
         tile.label = label
         tile.state = state
         tile.icon = Icon.createWithResource(this, icon)
+        // If auto-revert enabled and user is turning DNS off, schedule revert
+        try {
+            val autoRevertEnabled = sharedPreferences.autoRevertEnabled
+            if (autoRevertEnabled && dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
+                // Save current system mode/provider to preferences
+                val currentMode = PrivateDNSUtils.getPrivateMode(contentResolver)
+                val currentProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
+                sharedPreferences.revertMode = currentMode
+                sharedPreferences.revertProvider = currentProvider
+                // Schedule revert
+                val minutes = sharedPreferences.autoRevertMinutes
+                RevertScheduler.scheduleRevert(this, minutes)
+            } else if (!dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
+                // If switching back to some non-off state, cancel scheduled revert
+                RevertScheduler.cancelRevert(this)
+                sharedPreferences.revertMode = null
+                sharedPreferences.revertProvider = null
+            }
+        } catch (e: Exception) {
+            // swallow scheduling errors; still attempt to set DNS
+        }
+
         PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
         PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         tile.updateTile()

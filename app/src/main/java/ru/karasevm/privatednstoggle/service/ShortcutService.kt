@@ -10,6 +10,10 @@ import kotlinx.coroutines.SupervisorJob
 import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertEnabled
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertMinutes
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertProvider
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 
 class ShortcutService : Service() {
@@ -34,6 +38,24 @@ class ShortcutService : Service() {
      */
     private fun setDnsMode(dnsMode: String, dnsProvider: String? = null) {
         Log.d(TAG, "setDnsMode: attempting to set dns mode to $dnsMode with provider $dnsProvider")
+        // Handle auto-revert scheduling/cancellation similar to tile
+        try {
+            val prefs = PreferenceHelper.defaultPreference(this)
+            if (prefs.autoRevertEnabled && dnsMode == PrivateDNSUtils.DNS_MODE_OFF) {
+                val currentMode = PrivateDNSUtils.getPrivateMode(contentResolver)
+                val currentProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
+                prefs.revertMode = currentMode
+                prefs.revertProvider = currentProvider
+                RevertScheduler.scheduleRevert(this, prefs.autoRevertMinutes)
+            } else if (dnsMode != PrivateDNSUtils.DNS_MODE_OFF) {
+                RevertScheduler.cancelRevert(this)
+                val prefs2 = PreferenceHelper.defaultPreference(this)
+                prefs2.revertMode = null
+                prefs2.revertProvider = null
+            }
+        } catch (e: Exception) {
+            // ignore
+        }
         if (dnsMode == PrivateDNSUtils.DNS_MODE_PRIVATE) {
             PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         }
