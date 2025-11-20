@@ -74,9 +74,17 @@ class OptionsDialogFragment : DialogFragment() {
             if (!hasFocus) {
                 val text = binding.autoRevertMinutesInput.text?.toString() ?: ""
                 val value = text.toIntOrNull() ?: minutes
-                sharedPreferences.autoRevertMinutes = if (value <= 0) 1 else value
-                binding.autoRevertMinutesInput.setText(sharedPreferences.autoRevertMinutes.toString())
+                val finalValue = if (value <= 0) 1 else value
+                sharedPreferences.autoRevertMinutes = finalValue
+                binding.autoRevertMinutesInput.setText(finalValue.toString())
             }
+        }
+        // Also save on dialog dismiss to catch any pending edits
+        dialog?.setOnDismissListener {
+            val text = binding.autoRevertMinutesInput.text?.toString() ?: ""
+            val value = text.toIntOrNull() ?: minutes
+            val finalValue = if (value <= 0) 1 else value
+            sharedPreferences.autoRevertMinutes = finalValue
         }
     }
 }

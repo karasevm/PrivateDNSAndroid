@@ -253,27 +253,9 @@ class DnsTileService : TileService() {
         tile.label = label
         tile.state = state
         tile.icon = Icon.createWithResource(this, icon)
-        // If auto-revert enabled and user is turning DNS off, schedule revert
-        try {
-            val autoRevertEnabled = sharedPreferences.autoRevertEnabled
-            if (autoRevertEnabled && dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
-                // Save current system mode/provider to preferences
-                val currentMode = PrivateDNSUtils.getPrivateMode(contentResolver)
-                val currentProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
-                sharedPreferences.revertMode = currentMode
-                sharedPreferences.revertProvider = currentProvider
-                // Schedule revert
-                val minutes = sharedPreferences.autoRevertMinutes
-                RevertScheduler.scheduleRevert(this, minutes)
-            } else if (!dnsMode.equals(DNS_MODE_OFF, ignoreCase = true)) {
-                // If switching back to some non-off state, cancel scheduled revert
-                RevertScheduler.cancelRevert(this)
-                sharedPreferences.revertMode = null
-                sharedPreferences.revertProvider = null
-            }
-        } catch (e: Exception) {
-            // swallow scheduling errors; still attempt to set DNS
-        }
+        
+        // Schedule auto-revert if enabled
+        PrivateDNSUtils.scheduleAutoRevertIfEnabled(this, contentResolver, sharedPreferences, dnsMode, dnsProvider)
 
         PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
         PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
