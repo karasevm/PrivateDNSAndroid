@@ -13,25 +13,11 @@ import android.widget.Toast
 import android.app.NotificationManager
 import android.app.NotificationChannel
 import androidx.core.app.NotificationCompat
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+
 
 class RevertReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "RevertReceiver"
-    }
-
-    private fun writeDebugLog(context: Context, message: String) {
-        try {
-            val logFile = File(context.cacheDir, "revert_debug.log")
-            val timestamp = SimpleDateFormat("HH:mm:ss.SSS", Locale.US).format(Date())
-            val line = "[$timestamp] $message\n"
-            logFile.appendText(line)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to write debug log: ${e.message}")
-        }
     }
 
     private fun showNotification(context: Context, message: String) {
@@ -63,7 +49,6 @@ class RevertReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(TAG, "onReceive: revert alarm fired - ENTERING BROADCAST RECEIVER")
-        writeDebugLog(context, "onReceive: revert alarm fired - ENTERING BROADCAST RECEIVER")
 
         val prefs = PreferenceHelper.defaultPreference(context)
         val mode = prefs.revertMode
@@ -72,15 +57,11 @@ class RevertReceiver : BroadcastReceiver() {
 
         val logMsg = "onReceive: stored revert mode=$mode provider=$provider scheduledAt=$scheduledAt now=${System.currentTimeMillis()}"
         Log.d(TAG, logMsg)
-        writeDebugLog(context, logMsg)
 
         if (mode.isNullOrBlank()) {
             Log.d(TAG, "onReceive: nothing to revert")
-            writeDebugLog(context, "onReceive: nothing to revert - returning")
             return
         }
-
-        writeDebugLog(context, "onReceive: applying revert to mode=$mode")
 
         // Apply provider first if private
         if (mode.equals(PrivateDNSUtils.DNS_MODE_PRIVATE, true)) {
@@ -110,6 +91,5 @@ class RevertReceiver : BroadcastReceiver() {
 
         val finalMsg = "onReceive: reverted to mode=$mode provider=$provider"
         Log.d(TAG, finalMsg)
-        writeDebugLog(context, finalMsg)
     }
 }
