@@ -22,7 +22,7 @@
     <string name="add_server">Dodaj serwer</string>
     <string name="menu_add">Dodaj</string>
     <string name="delete_question">Usuń</string>
-    <string name="dns_unknown">Nieznane</string>
+    <string name="dns_unknown">Nieznany</string>
     <string name="done">Gotowe</string>
     <string name="options">Opcje</string>
     <string name="import_failure">Importowanie nie powiodło się</string>
@@ -51,4 +51,7 @@
     <string name="empty_hint">Kliknij na poniższy przycisk, aby dodać nowy</string>
     <string name="shizuku_success_toast">Udzielono zezwolenia, możesz teraz cofnąć zezwolenie w Shizuku</string>
     <string name="shizuku_failure_toast">Uzyskanie uprawnień nie powiodło się, udziel ich ręcznie</string>
+    <string name="shortcut_do_cycle">Następny serwer/tryb</string>
+    <string name="open_source_licenses">Licencje otwartego oprogramowania</string>
+    <string name="shortcut_switch_mode">Tryb przełączania</string>
 </resources>
