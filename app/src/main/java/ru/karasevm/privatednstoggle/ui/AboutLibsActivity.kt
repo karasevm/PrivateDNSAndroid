@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,7 +18,8 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.getValue
-import com.mikepenz.aboutlibraries.ui.compose.android.rememberLibraries
+import androidx.compose.ui.res.painterResource
+import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import ru.karasevm.privatednstoggle.R
 
@@ -44,14 +43,19 @@ class AboutLibsActivity : AppCompatActivity() {
                     }
                 }
             ) {
-                val libraries by rememberLibraries(R.raw.aboutlibraries)
+                val libraries by produceLibraries(R.raw.aboutlibraries)
                 Scaffold(
                     topBar = {
                         TopAppBar(
                             title = { Text("Libraries") },
                             navigationIcon = {
                                 IconButton(onClick = { finish() }) {
-                                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "back")
+                                    IconButton(onClick = { finish() }) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.arrow_back_24px),
+                                            contentDescription = "back"
+                                        )
+                                    }
                                 }
                             }
                         )
