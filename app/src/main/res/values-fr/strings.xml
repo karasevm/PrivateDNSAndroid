@@ -51,4 +51,7 @@
     <string name="a11y_drag_handle">Poignée</string>
     <string name="delete_question">Supprimer</string>
     <string name="cancel">Annuler</string>
+    <string name="shortcut_do_cycle">Serveur suivant/mode</string>
+    <string name="shortcut_switch_mode">Changer de mode</string>
+    <string name="open_source_licenses">Licences open source</string>
 </resources>
