@@ -16,7 +16,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ShareCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
@@ -336,6 +344,45 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
             }
         }
 
+    private fun showPermissionDialog() {
+
+        var permissionDialog: AlertDialog? = null
+        val dialogView = ComposeView(this).apply {
+            setContent {
+                val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (isSystemInDarkTheme())
+                        dynamicDarkColorScheme(applicationContext)
+                    else
+                        dynamicLightColorScheme(applicationContext)
+                } else {
+                    if (isSystemInDarkTheme()) {
+                        darkColorScheme()
+                    } else {
+                        lightColorScheme()
+                    }
+                }
+
+                MaterialTheme(colorScheme = colorScheme) {
+                    PermissionExplanationDialog(
+                        onDismiss = {
+                            permissionDialog?.dismiss()
+                        },
+                        onConfirm = {
+                            permissionDialog?.dismiss()
+                        }
+                    )
+                }
+            }
+        }
+
+        permissionDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .show()
+            .apply {
+                window?.setBackgroundDrawableResource(android.R.color.transparent)
+            }
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -365,15 +412,7 @@ class MainActivity : AppCompatActivity(), AddServerDialogFragment.NoticeDialogLi
                 }
             } else {
                 if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
-                    val browserIntent = Intent(
-                        Intent.ACTION_VIEW,
-                        "https://karasevm.github.io/PrivateDNSAndroid/".toUri()
-                    )
-                    Toast.makeText(
-                        this, R.string.shizuku_failure_toast, Toast.LENGTH_SHORT
-                    ).show()
-                    startActivity(browserIntent)
-                    finish()
+                    showPermissionDialog()
                 }
             }
         }

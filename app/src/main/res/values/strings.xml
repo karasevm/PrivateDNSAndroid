@@ -53,4 +53,15 @@
     <string name="shortcut_do_cycle">Next server/mode</string>
     <string name="shortcut_switch_mode">Switch mode</string>
     <string name="open_source_licenses">Open-source licenses</string>
+    <string name="permission_dialog_title">Permission Required</string>
+    <string name="permission_intro">To change the system Private DNS settings, we need you to manually grant the WRITE_SECURE_SETTINGS permission.</string>
+    <string name="permission_how_title">How to grant</string>
+    <string name="permission_how_details">You can grant the permission in two ways:</string>
+    <string name="permission_how_1">Install and activate %1$s from the Play Store and restart the app</string>
+    <string name="permission_how_2">Use adb to grant the permission manually by following %1$s</string>
+    <string name="permission_footer">You only need to do this once. You can browse the app, add servers, and change settings without the permission.</string>
+    <string name="permission_shizuku_text">Shizuku</string>
+    <string name="permission_shizuku_url">https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api</string>
+    <string name="permission_manual_text">instructions</string>
+    <string name="permission_manual_url">https://karasevm.github.io/PrivateDNSAndroid/</string>
 </resources>
