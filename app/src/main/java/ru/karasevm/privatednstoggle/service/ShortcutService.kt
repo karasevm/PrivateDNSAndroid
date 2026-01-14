@@ -10,6 +10,10 @@ import kotlinx.coroutines.SupervisorJob
 import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertEnabled
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertMinutes
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertProvider
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 
 class ShortcutService : Service() {
@@ -34,6 +38,28 @@ class ShortcutService : Service() {
      */
     private fun setDnsMode(dnsMode: String, dnsProvider: String? = null) {
         Log.d(TAG, "setDnsMode: attempting to set dns mode to $dnsMode with provider $dnsProvider")
+        
+        // Auto-revert: capture current state BEFORE change and schedule revert
+        try {
+            val prefs = PreferenceHelper.defaultPreference(this)
+            if (prefs.autoRevertEnabled) {
+                // Save CURRENT state as revert target (will revert back to it after X minutes)
+                val currentMode = PrivateDNSUtils.getPrivateMode(contentResolver)
+                val currentProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
+                prefs.revertMode = currentMode
+                prefs.revertProvider = currentProvider
+                RevertScheduler.scheduleRevert(this, prefs.autoRevertMinutes)
+                Log.d(TAG, "setDnsMode: auto-revert scheduled. Will revert FROM $dnsMode back TO $currentMode in ${prefs.autoRevertMinutes} minute(s)")
+            } else {
+                // Auto-revert disabled; cancel any pending revert
+                RevertScheduler.cancelRevert(this)
+                prefs.revertMode = null
+                prefs.revertProvider = null
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "setDnsMode: error with auto-revert: ${e.message}")
+        }
+        
         if (dnsMode == PrivateDNSUtils.DNS_MODE_PRIVATE) {
             PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         }

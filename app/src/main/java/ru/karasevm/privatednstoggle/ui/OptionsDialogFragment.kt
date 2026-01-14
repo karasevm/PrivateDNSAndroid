@@ -9,6 +9,8 @@ import ru.karasevm.privatednstoggle.databinding.DialogOptionsBinding
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoMode
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.requireUnlock
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertEnabled
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertMinutes
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 
 class OptionsDialogFragment : DialogFragment() {
@@ -58,6 +60,31 @@ class OptionsDialogFragment : DialogFragment() {
         binding.requireUnlockSwitch.isChecked = requireUnlock
         binding.requireUnlockSwitch.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.requireUnlock = isChecked
+        }
+
+        val autoRevertEnabled = sharedPreferences.autoRevertEnabled
+        binding.autoRevertSwitch.isChecked = autoRevertEnabled
+        binding.autoRevertSwitch.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.autoRevertEnabled = isChecked
+        }
+
+        val minutes = sharedPreferences.autoRevertMinutes
+        binding.autoRevertMinutesInput.setText(minutes.toString())
+        binding.autoRevertMinutesInput.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val text = binding.autoRevertMinutesInput.text?.toString() ?: ""
+                val value = text.toIntOrNull() ?: minutes
+                val finalValue = if (value <= 0) 1 else value
+                sharedPreferences.autoRevertMinutes = finalValue
+                binding.autoRevertMinutesInput.setText(finalValue.toString())
+            }
+        }
+        // Also save on dialog dismiss to catch any pending edits
+        dialog?.setOnDismissListener {
+            val text = binding.autoRevertMinutesInput.text?.toString() ?: ""
+            val value = text.toIntOrNull() ?: minutes
+            val finalValue = if (value <= 0) 1 else value
+            sharedPreferences.autoRevertMinutes = finalValue
         }
     }
 }
