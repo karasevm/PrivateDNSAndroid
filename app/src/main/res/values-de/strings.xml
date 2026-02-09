@@ -54,4 +54,13 @@
     <string name="permission_missing">Berechtigung nicht erteilt, überprüfen Sie die App für eine Anleitung</string>
     <string name="require_unlock_setting">Geräteentsperrung für den Serverwechsel verpflichtend machen</string>
     <string name="a11y_drag_handle">Schalter umlegen</string>
+    <string name="permission_dialog_title">Berechtigung erforderlich</string>
+    <string name="permission_intro">Um die privaten DNS-Einstellungen des Systems zu ändern, müssen Sie die WRITE_SECURE_SETTINGS-Berechtigung manuell erteilen.</string>
+    <string name="permission_how_title">So gewähren Sie</string>
+    <string name="permission_how_details">Sie können die Berechtigung auf zwei Arten erteilen:</string>
+    <string name="permission_manual_text">Anweisungen</string>
+    <string name="permission_manual_url">https://karasevm.github.io/PrivateDNSAndroid/</string>
+    <string name="permission_footer">Das brauchen Sie nur einmal zu tun. Sie können ohne die Berechtigung die App durchsuchen, Server hinzufügen und Einstellungen ändern.</string>
+    <string name="permission_shizuku_text">Shizuku</string>
+    <string name="permission_shizuku_url">https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api</string>
 </resources>
