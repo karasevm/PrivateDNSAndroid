@@ -51,4 +51,18 @@
     <string name="a11y_drag_handle">Poignée</string>
     <string name="delete_question">Supprimer</string>
     <string name="cancel">Annuler</string>
+    <string name="shortcut_do_cycle">Serveur suivant/mode</string>
+    <string name="shortcut_switch_mode">Changer de mode</string>
+    <string name="open_source_licenses">Licences open source</string>
+    <string name="permission_dialog_title">Autorisation requise</string>
+    <string name="permission_how_title">Comment accorder</string>
+    <string name="permission_how_details">Vous pouvez accorder l\'autorisation de deux façons :</string>
+    <string name="permission_how_1">Installez et activez %1$s à partir du Play Store puis redémarrez l\'application</string>
+    <string name="permission_how_2">Utilisez adb pour accorder l\'autorisation manuellement à partir de %1$s</string>
+    <string name="permission_footer">Cette opération ne doit être réalisée qu\'une seule fois. Vous pouvez parcourir l\'application et modifier les paramètres sans l\'autorisation.</string>
+    <string name="permission_shizuku_text">Shizuku</string>
+    <string name="permission_shizuku_url">https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api</string>
+    <string name="permission_manual_text">instructions</string>
+    <string name="permission_manual_url">https://karasevm.github.io/PrivateDNSAndroid/</string>
+    <string name="permission_intro">Pour modifier les paramètres DNS privés du système, vous devez accorder manuellement l\'autorisation WRITE_SECURE_SETTINGS.</string>
 </resources>
