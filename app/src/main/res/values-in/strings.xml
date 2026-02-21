@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tombol Cepat DNS Pribadi</string>
+    <string name="tile_name">Tombol Pengaktifan DNS Pribadi</string>
+    <string name="permission_missing">Izin tidak diberikan, periksa aplikasi untuk melihat caranya.</string>
+    <string name="dns_off">Mati</string>
+    <string name="dns_auto">Otomatis</string>
+    <string name="dns_unknown">Tidak diketahui</string>
+    <string name="add_server">Tambahkan Server</string>
+    <string name="menu_add">Tambahkan</string>
+    <string name="menu_save">Simpan</string>
+    <string name="menu_privacy_policy">Kebijakan Privasi</string>
+    <string name="select_server">Pilih Server</string>
+    <string name="done">Selesai</string>
+    <string name="cancel">Batal</string>
+    <string name="delete_question">Hapus</string>
+    <string name="delete_message">Apakah lu yakin mau hapus server?</string>
+    <string name="delete">Hapus</string>
+    <string name="server_length_error">Alamat server gak boleh kosong</string>
+    <string name="add_edittext_label_hint">Label server DNS (Opsional)</string>
+    <string name="add_edittext_hint">Alamat server DNS</string>
+    <string name="ok">OKE</string>
+    <string name="auto_option_description">Pilih opsi yang ingin ditampilkan di tile</string>
+    <string name="auto_option_only_off">Hanya mati</string>
+    <string name="auto_option_only_auto">Hanya otomatis</string>
+    <string name="auto_option_off_and_auto">Mati dan otomatis</string>
+    <string name="auto_option_only_private">Hanya DNS Pribadi</string>
+    <string name="open_app">Buka aplikasi</string>
+    <string name="set_to_off_toast">DNS Pribadi dimatikan</string>
+</resources>
