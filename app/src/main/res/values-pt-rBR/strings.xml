@@ -5,7 +5,7 @@
     <string name="app_name">Alteração de DNS privado</string>
     <string name="cancel">Cancelar</string>
     <string name="add_server">Adicionar servidor</string>
-    <string name="add_edittext_hint">Endereço do servidor DNS</string>
+    <string name="add_edittext_hint">Endereço do servidor de DNS</string>
     <string name="auto_option_description">Escolha opções disponível em atalho</string>
     <string name="tile_name">Alteração de DNS privado</string>
     <string name="dns_off">Desativado</string>
@@ -19,7 +19,7 @@
     <string name="delete_message">Tem certeza de que quer apagar o servidor?</string>
     <string name="delete">Apagar</string>
     <string name="server_length_error">O endereço do servidor não pode estar em branco</string>
-    <string name="add_edittext_label_hint">Identificação do servidor DNS (opcional)</string>
+    <string name="add_edittext_label_hint">Nome do servidor de DNS (opcional)</string>
     <string name="options">Opções</string>
     <string name="ok">Ok</string>
     <string name="auto_option_only_off">Somente desativado</string>
@@ -27,8 +27,8 @@
     <string name="auto_option_only_private">Somente DNS privado</string>
     <string name="open_app">Abrir app</string>
     <string name="set_to_off_toast">DNS privado desativado</string>
-    <string name="set_to_auto_toast">DNS privado definido para automático</string>
-    <string name="set_to_provider_toast">DNS privado definido para %1$s</string>
+    <string name="set_to_auto_toast">DNS privado definido como automático</string>
+    <string name="set_to_provider_toast">DNS privado definido como %1$s</string>
     <string name="a11y_drag_handle">Arrastre</string>
     <string name="menu_import">Importar</string>
     <string name="menu_export">Exportar</string>
@@ -52,7 +52,17 @@
     <string name="shizuku_failure_toast">Falha ao obter a permissão. Tente conceder manualmente</string>
     <string name="shizuku_success_toast">Permissão concedida, você pode revogar a permissão do Shizuku agora</string>
     <string name="permission_how_1">Instale e ative %1$s através da Play Store e reinicie o app</string>
-    <string name="permission_footer">Só é necessário fazer isso uma vez. Você pode navegar pelo app, adicionar servidores e alterar as configurações, mesmo sem a permissão.</string>
+    <string name="permission_footer">Você só precisa fazer isso uma vez. Depois pode navegar pelo aplicativo, adicionar servidores e alterar as configurações sem fazer mais nada.</string>
     <string name="permission_shizuku_text">Shizuku</string>
     <string name="permission_manual_text">instruções</string>
+    <string name="shortcut_do_cycle">Próximo servidor/modo</string>
+    <string name="shortcut_switch_mode">Alterar modo</string>
+    <string name="open_source_licenses">Licenças de código aberto</string>
+    <string name="permission_dialog_title">Permissão exigida</string>
+    <string name="permission_intro">Para alterar as configurações de DNS privado do sistema, é necessários conceder a permissão WRITE_SECURE_SETTINGS.</string>
+    <string name="permission_how_title">Como conceder</string>
+    <string name="permission_how_details">Você pode conceder a permissão de duas formas:</string>
+    <string name="permission_how_2">Use o adb para conceder a permissão manualmente, seguindo as instruções em %1$s</string>
+    <string name="permission_shizuku_url">https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api</string>
+    <string name="permission_manual_url">https://karasevm.github.io/PrivateDNSAndroid/</string>
 </resources>
