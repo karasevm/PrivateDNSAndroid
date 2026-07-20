@@ -58,8 +58,8 @@
     <string name="permission_how_2">Usa adb per fornire manualmente l\'autorizzazione seguendo %1$s</string>
     <string name="permission_footer">Dovrai farlo solo una volta. Puoi navigare l\'applicazione, aggiungere server e modificare le impostazioni senza l\'autorizzazione.</string>
     <string name="permission_shizuku_text">Shizuku</string>
-    <string name="set_to_provider_toast">DNS privato impostato a %1$s</string>
-    <string name="tile_name">Switch DNS privato</string>
+    <string name="set_to_provider_toast">DNS Privato impostato su %1$s</string>
+    <string name="tile_name">Interruttore DNS Privato</string>
     <string name="shortcut_switch_mode">Modalità switch</string>
     <string name="shortcut_do_cycle">Server/modo successivo</string>
     <string name="a11y_drag_handle">Maniglia di trascinamento</string>
