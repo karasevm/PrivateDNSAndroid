@@ -48,4 +48,21 @@
     <string name="set_to_off_toast">DNS Privato disattivato</string>
     <string name="import_failure_json">Importazione non riuscita, JSON malformato</string>
     <string name="menu_import_from_file">Da un file</string>
+    <string name="permission_manual_text">istruzioni</string>
+    <string name="open_source_licenses">Licenze Open Source</string>
+    <string name="permission_dialog_title">Autorizzazione richiesta</string>
+    <string name="permission_intro">Per modificare le impostazioni di Private DNS di sistema, è necessario fornire manualmente l\'autorizzazione WRITE_SECURE_SETTINGS.</string>
+    <string name="permission_how_title">Come fornire l\'autorizzazione</string>
+    <string name="permission_how_details">Puoi fornire l\'autorizzazione in due modi:</string>
+    <string name="permission_how_1">Installa e attiva %1$s dal Play Store e riavvia l\'applicazione</string>
+    <string name="permission_how_2">Usa adb per fornire manualmente l\'autorizzazione seguendo %1$s</string>
+    <string name="permission_footer">Dovrai farlo solo una volta. Puoi navigare l\'applicazione, aggiungere server e modificare le impostazioni senza l\'autorizzazione.</string>
+    <string name="permission_shizuku_text">Shizuku</string>
+    <string name="set_to_provider_toast">DNS privato impostato a %1$s</string>
+    <string name="tile_name">Switch DNS privato</string>
+    <string name="shortcut_switch_mode">Modalità switch</string>
+    <string name="shortcut_do_cycle">Server/modo successivo</string>
+    <string name="a11y_drag_handle">Maniglia di trascinamento</string>
+    <string name="permission_shizuku_url">https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api</string>
+    <string name="permission_manual_url">https://karasevm.github.io/PrivateDNSAndroid/</string>
 </resources>
