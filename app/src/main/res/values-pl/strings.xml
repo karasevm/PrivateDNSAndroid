@@ -54,4 +54,15 @@
     <string name="shortcut_do_cycle">Następny serwer/tryb</string>
     <string name="open_source_licenses">Licencje otwartego oprogramowania</string>
     <string name="shortcut_switch_mode">Tryb przełączania</string>
+    <string name="permission_how_1">Zainstaluj i aktywuj %1$s z Sklepu Play, a następnie zrestartuj aplikację</string>
+    <string name="permission_how_2">Użyj ADB, aby ręcznie przyznać uprawnienia, wykonując następujące czynności %1$s</string>
+    <string name="permission_footer">Wystarczy to zrobić tylko raz. Bez przydzielenia uprawnienia możesz przeglądać aplikację, dodawać serwery i zmieniać ustawienia.</string>
+    <string name="permission_shizuku_text">Shizuku</string>
+    <string name="permission_shizuku_url">https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api</string>
+    <string name="permission_manual_text">instrukcje</string>
+    <string name="permission_manual_url">https://karasevm.github.io/PrivateDNSAndroid/</string>
+    <string name="permission_dialog_title">Wymagane przydzielenie uprawnień</string>
+    <string name="permission_intro">Do zmiany ustawień prywatnego serwera DNS systemu, należy ręcznie przydzielić uprawnienie WRITE_SECURE_SETTINGS.</string>
+    <string name="permission_how_title">W jaki sposób przydzielić uprawnienie</string>
+    <string name="permission_how_details">Możesz przydzielić uprawnienie na dwa sposoby:</string>
 </resources>
