@@ -13,7 +13,7 @@ interface DnsServerDao {
     fun getAll(): Flow<List<DnsServer>>
 
     @Query("SELECT * FROM dns_servers WHERE enabled = 1 ORDER BY sortOrder ASC LIMIT 1")
-    suspend fun getFirstEnabled(): DnsServer
+        suspend fun getFirstEnabled(): DnsServer?
 
     @Query("SELECT * FROM dns_servers WHERE server = :server LIMIT 1")
     suspend fun getFirstByServer(server: String): DnsServer?

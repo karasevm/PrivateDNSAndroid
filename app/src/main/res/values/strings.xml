@@ -52,6 +52,8 @@
     <string name="shizuku_failure_toast">Failed to acquire permission, please grant it manually</string>
     <string name="shortcut_do_cycle">Next server/mode</string>
     <string name="shortcut_switch_mode">Switch mode</string>
+    <string name="shortcut_turn_on">Turn on</string>
+    <string name="shortcut_turn_off">Turn off</string>
     <string name="open_source_licenses">Open-source licenses</string>
     <string name="permission_dialog_title">Permission Required</string>
     <string name="permission_intro">To change the system Private DNS settings, we need you to manually grant the WRITE_SECURE_SETTINGS permission.</string>

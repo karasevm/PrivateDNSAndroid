@@ -7,6 +7,7 @@ import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
@@ -21,6 +22,8 @@ class ShortcutService : Service() {
     companion object {
         private const val ACTION_DO_CYCLE = "privatednstoggle://do_cycle" // regular cycle
         private const val ACTION_SWITCH_MODE = "privatednstoggle://switch_mode" // toggle private and non-private modes
+        private const val ACTION_TURN_ON = "privatednstoggle://turn_on"
+        private const val ACTION_TURN_OFF = "privatednstoggle://turn_off"
         private const val TAG = "ShortcutService"
     }
 
@@ -67,6 +70,18 @@ class ShortcutService : Service() {
                             setDnsMode(dnsMode, dnsProvider)
                         })
                 }
+
+                ACTION_TURN_ON -> {
+                    scope.launch {
+                        val dnsProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
+                            ?: repository.getFirstEnabled()?.server
+                        if (dnsProvider != null) {
+                            setDnsMode(PrivateDNSUtils.DNS_MODE_PRIVATE, dnsProvider)
+                        }
+                    }
+                }
+
+                ACTION_TURN_OFF -> setDnsMode(PrivateDNSUtils.DNS_MODE_OFF)
             }
         }
         return START_NOT_STICKY
