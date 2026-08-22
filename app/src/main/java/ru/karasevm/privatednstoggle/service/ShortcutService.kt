@@ -73,8 +73,14 @@ class ShortcutService : Service() {
 
                 ACTION_TURN_ON -> {
                     scope.launch {
-                        val dnsProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
-                            ?: repository.getFirstEnabled()?.server
+                        val currentProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
+                        val dnsProvider = if (currentProvider != null &&
+                            repository.getFirstByServer(currentProvider)?.enabled == true
+                        ) {
+                            currentProvider
+                        } else {
+                            repository.getFirstEnabled()?.server
+                        }
                         if (dnsProvider != null) {
                             setDnsMode(PrivateDNSUtils.DNS_MODE_PRIVATE, dnsProvider)
                         }
