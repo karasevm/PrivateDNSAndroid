@@ -30,6 +30,9 @@
     <string name="set_to_auto_toast">Private DNS set to auto</string>
     <string name="set_to_provider_toast">Private DNS set to %1$s</string>
     <string name="require_unlock_setting">Require unlocking the device to change server</string>
+    <string name="auto_revert_enable">Auto-revert to previous DNS after timeout</string>
+    <string name="auto_revert_duration_label">Revert after</string>
+    <string name="minutes_short">min</string>
     <string name="a11y_drag_handle">Drag handle</string>
     <string name="menu_import">Import</string>
     <string name="menu_export">Export</string>

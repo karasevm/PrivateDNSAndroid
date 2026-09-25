@@ -18,6 +18,7 @@ import ru.karasevm.privatednstoggle.databinding.SheetDnsSelectorBinding
 import ru.karasevm.privatednstoggle.model.DnsServer
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils.checkForPermission
+import ru.karasevm.privatednstoggle.util.PreferenceHelper
 
 class DNSServerDialogFragment : DialogFragment() {
 
@@ -75,9 +76,15 @@ class DNSServerDialogFragment : DialogFragment() {
             ).show()
             dialog!!.dismiss()
         }
+        val sharedPreferences = PreferenceHelper.defaultPreference(requireContext())
+        
         adapter.onItemClick = { id ->
             when (id) {
                 OFF_ID -> {
+                    PrivateDNSUtils.scheduleAutoRevertIfEnabled(
+                        requireContext(), contentResolver, sharedPreferences,
+                        PrivateDNSUtils.DNS_MODE_OFF, null
+                    )
                     PrivateDNSUtils.setPrivateMode(
                         contentResolver,
                         PrivateDNSUtils.DNS_MODE_OFF
@@ -89,6 +96,10 @@ class DNSServerDialogFragment : DialogFragment() {
                 }
 
                 AUTO_ID -> {
+                    PrivateDNSUtils.scheduleAutoRevertIfEnabled(
+                        requireContext(), contentResolver, sharedPreferences,
+                        PrivateDNSUtils.DNS_MODE_AUTO, null
+                    )
                     PrivateDNSUtils.setPrivateMode(
                         contentResolver,
                         PrivateDNSUtils.DNS_MODE_AUTO
@@ -102,6 +113,10 @@ class DNSServerDialogFragment : DialogFragment() {
                 else -> {
                     lifecycleScope.launch {
                         val server = servers.find { server -> server.id == id }
+                        PrivateDNSUtils.scheduleAutoRevertIfEnabled(
+                            requireContext(), contentResolver, sharedPreferences,
+                            PrivateDNSUtils.DNS_MODE_PRIVATE, server?.server
+                        )
                         PrivateDNSUtils.setPrivateMode(
                             contentResolver,
                             PrivateDNSUtils.DNS_MODE_PRIVATE
