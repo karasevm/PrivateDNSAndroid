@@ -22,4 +22,26 @@
             android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
             android:data="privatednstoggle://switch_mode"/>
     </shortcut>
+    <shortcut
+        android:shortcutId="turn_on"
+        android:enabled="true"
+        android:icon="@drawable/ic_private_black_24dp"
+        android:shortcutShortLabel="@string/shortcut_turn_on">
+        <intent
+            android:action="ru.karasevm.privatednstoggle.action.SHORTCUT"
+            android:targetPackage="ru.karasevm.privatednstoggle"
+            android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
+            android:data="privatednstoggle://turn_on"/>
+    </shortcut>
+    <shortcut
+        android:shortcutId="turn_off"
+        android:enabled="true"
+        android:icon="@drawable/ic_off_black_24dp"
+        android:shortcutShortLabel="@string/shortcut_turn_off">
+        <intent
+            android:action="ru.karasevm.privatednstoggle.action.SHORTCUT"
+            android:targetPackage="ru.karasevm.privatednstoggle"
+            android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
+            android:data="privatednstoggle://turn_off"/>
+    </shortcut>
 </shortcuts>
