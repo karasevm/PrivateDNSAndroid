@@ -12,7 +12,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.model.DnsServer
+import ru.karasevm.privatednstoggle.service.RevertScheduler
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertEnabled
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertMinutes
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertProvider
 
 object PrivateDNSUtils {
     const val DNS_MODE_OFF = "off"
@@ -187,6 +192,44 @@ object PrivateDNSUtils {
                     onNext.invoke(DNS_MODE_PRIVATE, nextAddress.server)
                 }
             }
+        }
+    }
+
+    /**
+     * Schedule auto-revert if enabled. Captures current DNS state as revert target.
+     *
+     * @param context Android context
+     * @param contentResolver content resolver to read current DNS state
+     * @param sharedPreferences shared preferences for storing revert state and reading config
+     * @param newMode the new DNS mode being set
+     * @param newProvider the new DNS provider being set
+     */
+    fun scheduleAutoRevertIfEnabled(
+        context: Context,
+        contentResolver: ContentResolver,
+        sharedPreferences: SharedPreferences,
+        newMode: String,
+        newProvider: String?
+    ) {
+        try {
+            if (sharedPreferences.autoRevertEnabled) {
+                // Capture current state BEFORE change as revert target
+                val currentMode = getPrivateMode(contentResolver)
+                val currentProvider = getPrivateProvider(contentResolver)
+                sharedPreferences.revertMode = currentMode
+                sharedPreferences.revertProvider = currentProvider
+                // Schedule revert
+                val minutes = sharedPreferences.autoRevertMinutes
+                RevertScheduler.scheduleRevert(context, minutes)
+                Log.d("PrivateDNSUtils", "scheduleAutoRevertIfEnabled: scheduled revert FROM $newMode back TO $currentMode in $minutes minute(s)")
+            } else {
+                // Auto-revert disabled; cancel any pending revert
+                RevertScheduler.cancelRevert(context)
+                sharedPreferences.revertMode = null
+                sharedPreferences.revertProvider = null
+            }
+        } catch (e: Exception) {
+            Log.w("PrivateDNSUtils", "scheduleAutoRevertIfEnabled: error: ${e.message}")
         }
     }
 

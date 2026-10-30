@@ -19,6 +19,10 @@ import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.R
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertEnabled
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertMinutes
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.revertProvider
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.requireUnlock
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils.DNS_MODE_AUTO
@@ -249,6 +253,10 @@ class DnsTileService : TileService() {
         tile.label = label
         tile.state = state
         tile.icon = Icon.createWithResource(this, icon)
+        
+        // Schedule auto-revert if enabled
+        PrivateDNSUtils.scheduleAutoRevertIfEnabled(this, contentResolver, sharedPreferences, dnsMode, dnsProvider)
+
         PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
         PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         tile.updateTile()

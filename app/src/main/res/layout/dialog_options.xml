@@ -62,4 +62,46 @@
         android:text="@string/require_unlock_setting"
         android:textSize="16sp" />
 
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/autoRevertSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:maxWidth="320dp"
+        android:text="@string/auto_revert_enable"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_revert_duration_label"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/autoRevertMinutesInput"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="4"
+            android:gravity="end"
+            android:text="5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/minutes_short" />
+
+    </LinearLayout>
+
 </LinearLayout>
