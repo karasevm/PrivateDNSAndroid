@@ -27,7 +27,7 @@
     <string name="auto_option_only_private">Hanya DNS Pribadi</string>
     <string name="open_app">Buka aplikasi</string>
     <string name="set_to_off_toast">DNS Pribadi dimatikan</string>
-    <string name="options">Opsi</string>
+    <string name="options">Pilihan</string>
     <string name="set_to_auto_toast">DNS Pribadi disetel ke otomatis</string>
     <string name="set_to_provider_toast">DNS Pribadi disetel ke %1$s</string>
     <string name="require_unlock_setting">Wajib membuka kunci perangkat untuk mengubah server</string>
