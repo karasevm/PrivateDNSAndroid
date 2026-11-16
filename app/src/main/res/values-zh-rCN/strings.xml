@@ -65,4 +65,6 @@
     <string name="permission_how_2">使用 adb 手动授予权限，按照 %1$s 进行操作</string>
     <string name="permission_footer">此操作仅需执行一次。没有权限，您仍可浏览应用、添加服务器和更改设置。</string>
     <string name="permission_manual_text">操作说明</string>
+    <string name="shortcut_turn_on">开启</string>
+    <string name="shortcut_turn_off">关闭</string>
 </resources>

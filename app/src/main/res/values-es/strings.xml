@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Private DNS Quick Toggle</string>
+    <string name="tile_name">Interruptor DNS Privado</string>
+    <string name="permission_missing">Permiso no concedido, revisa la app para ver cómo hacerlo</string>
+</resources>
